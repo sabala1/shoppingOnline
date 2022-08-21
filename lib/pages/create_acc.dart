@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,10 +21,16 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
+  String avatar = '';
   bool statusRedEye = true;
   File? _image;
   double? lat, lng;
   final formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController userController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -82,13 +90,13 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   Set<Marker> setMarker() => <Marker>{
-    Marker(
-      markerId: const MarkerId('id'),
-      position: LatLng(lat!, lng!),
-      infoWindow:
-          InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
-    ),
-  };
+        Marker(
+          markerId: const MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow:
+              InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
+        ),
+      };
 
   Widget buildMap() => SizedBox(
         width: double.infinity,
@@ -169,18 +177,67 @@ class _CreateAccountState extends State<CreateAccount> {
 
   IconButton buildCheckTypeUser() {
     return IconButton(
-          onPressed: () {
-            if(formKey.currentState!.validate()){
-              if(typeUser == null) {
-                print('Non Choose Type User');
-                MyDialog().normalDialog(context, 'Choose TypeUser', 'Please Tap Choose TypeUser');
-              }else {
-                print('Process Insert to Database');
-              }
-            }
-          },
-          icon: const Icon(Icons.cloud_upload),
-        );
+      onPressed: () {
+        if (formKey.currentState!.validate()) {
+          if (typeUser == null) {
+            print('Non Choose Type User');
+            MyDialog().normalDialog(
+                context, 'Choose TypeUser', 'Please Tap Choose TypeUser');
+          } else {
+            print('Process Insert to Database');
+            uploadPicAndInsertData();
+          }
+        }
+      },
+      icon: const Icon(Icons.cloud_upload),
+    );
+  }
+
+  Future<Null> uploadPicAndInsertData() async {
+    String name = nameController.text;
+    String address = addressController.text;
+    String phone = phoneController.text;
+    String user = userController.text;
+    String password = passwordController.text;
+    print(
+        '## name = $name, address = $phone, user = $user, password = $password');
+
+    //await Dio().get('https://7e2d-2405-9800-ba10-f0ca-483c-802f-5def-8a6.ngrok.io/shoppingmall/getUserWhereUser.php?isAdd=true&user=$user').then((value) => print('## value ==>> $value'),);
+    String path =
+        '${MyConstant.domain}/shoppingonline/getUserWhereUser.php?isAdd=true&user=$user';
+
+    await Dio().get(path).then(
+      (value) async {
+        print('## value ==>> $value');
+        if (value.toString() == 'null') {
+          print('## user OK');
+          if (_image == null) {
+            //No Avatar
+            processInsertMySQL();
+          } else {
+            //Have Avatar
+            String apiSaveAvatar =
+                '${MyConstant.domain}/shoppingonline/saveAvatar.php';
+            int i = Random().nextInt(100000);
+            String nameAvatar = 'avatar$i.jpg';
+            Map<String, dynamic> map = Map();
+            map['file'] = await MultipartFile.fromFile(_image!.path,
+                filename: nameAvatar);
+            FormData data = FormData.fromMap(map);
+            await Dio().post(apiSaveAvatar, data: data).then((value) {
+              avatar = '/shoppingonline/avatar/$nameAvatar';
+              processInsertMySQL();
+            });
+          }
+        } else {
+          MyDialog().normalDialog(context, 'User Ready', 'Pleass Change User');
+        }
+      },
+    );
+  }
+
+  Future<Null> processInsertMySQL() async {
+    print('## processInsertMySQL Work & avatar ==>> $avatar');
   }
 
   Row buildName(double size) {
@@ -191,7 +248,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
-            //controller: nameController,
+            controller: nameController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -229,6 +286,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
+            controller: addressController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter a valod address.';
@@ -268,6 +326,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
+            controller: phoneController,
             keyboardType: TextInputType.phone,
             validator: (value) {
               if (value!.isEmpty) {
@@ -304,6 +363,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
+            controller: userController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -339,6 +399,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
+            controller: passwordController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
