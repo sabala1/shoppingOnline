@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
@@ -291,10 +292,29 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
+  Set<Marker> setMarker() => <Marker>{
+    Marker(
+      markerId: const MarkerId('id'),
+      position: LatLng(lat!, lng!),
+      infoWindow:
+          InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
+    ),
+  };
+
   Widget buildMap() => SizedBox(
-      width: double.infinity,
-      height: 200,
-      child: lat == null ? const ShowProgress() : Text('Lat = $lat, Lng = $lng'),);
+        width: double.infinity,
+        height: 250,
+        child: lat == null
+            ? const ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
+      );
 
   Future<Null> chooseImage(ImageSource source) async {
     try {
@@ -396,7 +416,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Container buildTitle(String title) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.symmetric(vertical: 16),
       child: ShowTitle(
         title: title,
         textStyle: MyConstant().t2Style(),
