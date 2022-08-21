@@ -8,11 +8,12 @@ class Constant {
   static String routeAuthen = '/authen';
   static String routeCreateAccount = '/createAccount';
   static String routeBuyerService = '/buyerService';
-  static String routeSelerervice = '/selerService';
+  static String routeSellerervice = '/sellerService';
   static String routeRiderService = '/riderService';
 
   //Image
   static String image1 = 'images/Delivery1.png';
+  static String avatar = 'images/avatar.png';
 
   //Color
   static Color primary = const Color(0xffe57373);

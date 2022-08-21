@@ -1,17 +1,339 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shoppingonline/universes/constant.dart';
+import 'package:shoppingonline/widgets/show_img.dart';
+import 'package:shoppingonline/widgets/show_title.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({ Key? key }) : super(key: key);
+  const CreateAccount({Key? key}) : super(key: key);
 
   @override
   State<CreateAccount> createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  String? typeUser;
+  bool statusRedEye = true;
+  File? _image;
+
+  Row buildName(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: size*0.75,
+          height: 50,
+          child: TextFormField(
+            decoration: InputDecoration(
+              labelStyle: Constant().t3Style(),
+              labelText: 'Name :',
+              prefixIcon: Icon(
+                Icons.fingerprint,
+                color: Constant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.dark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.light),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildNewAddress(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: size*0.75,
+          child: TextFormField(
+            maxLines: 3,
+            decoration: InputDecoration(
+              hintText: 'Address :',
+              hintStyle: Constant().t3Style(),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),
+                child: Icon(
+                  Icons.home,
+                  color: Constant.dark,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.dark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.light),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildPhone(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          width: size*0.75,
+          height: 50,
+          child: TextFormField(
+            decoration: InputDecoration(
+              labelStyle: Constant().t3Style(),
+              labelText: 'Phone :',
+              prefixIcon: Icon(
+                Icons.phone,
+                color: Constant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.dark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.light),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildUser(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          width: size*0.75,
+          height: 50,
+          child: TextFormField(
+            decoration: InputDecoration(
+              labelStyle: Constant().t3Style(),
+              labelText: 'User :',
+              prefixIcon: Icon(
+                Icons.account_circle_outlined,
+                color: Constant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.dark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.light),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildPassword(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          width: size*0.75,
+          height: 50,
+          child: TextFormField(
+            obscureText: statusRedEye,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    statusRedEye = !statusRedEye;
+                  });
+                },
+                icon: statusRedEye
+                    ? Icon(
+                        Icons.remove_red_eye,
+                        color: Constant.dark,
+                      )
+                    : Icon(
+                        Icons.remove_red_eye_outlined,
+                        color: Constant.dark,
+                      ),
+              ),
+              labelStyle: Constant().t3Style(),
+              labelText: 'Password :',
+              prefixIcon: Icon(
+                Icons.lock_outline,
+                color: Constant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.dark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Constant.light),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width;
     return Scaffold(
-      
+      appBar: AppBar(
+        title: const Text('Create New Account'),
+        backgroundColor: Constant.primary,
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(
+          FocusNode(),
+        ),
+        behavior: HitTestBehavior.opaque,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          children: [
+            buildTitle('ข้อมูลทั่วไป :'),
+            buildName(size),
+            buildTitle('คุณคือ :'),
+            buildRadioBuyer(),
+            buildRadioSeller(),
+            buildRadioRider(),
+            buildTitle('ข้อมูลพื้นฐาน :'),
+            buildNewAddress(size),
+            buildPhone(size),
+            buildUser(size),
+            buildPassword(size),
+            buildTitle('รูปภาพ: '),
+            buildSubTitle(),
+            buildAvatar(size),
+            buildSubTitle(),
+            buildSubTitle(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<Null> chooseImage(ImageSource source) async {
+    try {
+      var image = await ImagePicker().pickImage(
+        source: source,
+        maxHeight: 800,
+        maxWidth: 800,
+      );
+      setState(() {
+        _image = File(image!.path);
+      });
+    } catch (e) {}
+  }
+
+  Row buildAvatar(double size) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: () => chooseImage(ImageSource.camera),
+          icon: const Icon(
+            Icons.add_a_photo,
+            size: 36,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          width: size*0.6,
+          child: _image == null
+              ? ShowImage(pathImage: Constant.avatar)
+              : Image.file(_image!),
+        ),
+        IconButton(
+          onPressed: () => chooseImage(ImageSource.gallery),
+          icon: const Icon(
+            Icons.add_photo_alternate,
+            size: 36,
+          ),
+        ),
+      ],
+    );
+  }
+
+  ShowTitle buildSubTitle() {
+    return ShowTitle(
+      title: 'รูปภาพแสดงตัวตน   *ไม่บังคับ',
+      textStyle: Constant().t3Style(),
+    );
+  }
+
+  RadioListTile<String> buildRadioBuyer() {
+    return RadioListTile(
+      value: 'buyer',
+      groupValue: typeUser,
+      onChanged: (value) {
+        setState(() {
+          typeUser = value;
+        });
+      },
+      title: ShowTitle(
+        title: 'ผู้ซื้อ (Buyer)',
+        textStyle: Constant().t3Style(),
+      ),
+    );
+  }
+
+  RadioListTile<String> buildRadioSeller() {
+    return RadioListTile(
+      value: 'seller',
+      groupValue: typeUser,
+      onChanged: (value) {
+        setState(() {
+          typeUser = value;
+        });
+      },
+      title: ShowTitle(
+        title: 'ผู้ขาย (Seller)',
+        textStyle: Constant().t3Style(),
+      ),
+    );
+  }
+
+  RadioListTile<String> buildRadioRider() {
+    return RadioListTile(
+      value: 'rider',
+      groupValue: typeUser,
+      onChanged: (value) {
+        setState(() {
+          typeUser = value;
+        });
+      },
+      title: ShowTitle(
+        title: 'ผู้ส่ง (Rider)',
+        textStyle: Constant().t3Style(),
+      ),
+    );
+  }
+
+  Container buildTitle(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16),
+      child: ShowTitle(
+        title: title,
+        textStyle: Constant().t2Style(),
+      ),
     );
   }
 }

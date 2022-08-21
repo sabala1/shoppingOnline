@@ -4,14 +4,14 @@ import 'package:shoppingonline/pages/authen.dart';
 import 'package:shoppingonline/pages/buyer_ser.dart';
 import 'package:shoppingonline/pages/create_acc.dart';
 import 'package:shoppingonline/pages/rider_ser.dart';
-import 'package:shoppingonline/pages/seler_ser.dart';
+import 'package:shoppingonline/pages/seller_ser.dart';
 
 
 final Map<String, WidgetBuilder> map = {
   '/authen':(contex) => const Authen(),
   '/createAccount':(context) => const CreateAccount(),
   '/buyerService':(context) => const BuyerService(),
-  '/selerService':(context) => const SelerService(),
+  '/sellerService':(context) => const SellerService(),
   '/riderService':(context) => const RiderService(),
 }; 
 
