@@ -22,6 +22,7 @@ class _CreateAccountState extends State<CreateAccount> {
   bool statusRedEye = true;
   File? _image;
   double? lat, lng;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -80,14 +81,124 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+  Set<Marker> setMarker() => <Marker>{
+    Marker(
+      markerId: const MarkerId('id'),
+      position: LatLng(lat!, lng!),
+      infoWindow:
+          InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
+    ),
+  };
+
+  Widget buildMap() => SizedBox(
+        width: double.infinity,
+        height: 250,
+        child: lat == null
+            ? const ShowProgress()
+            : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(lat!, lng!),
+                  zoom: 16,
+                ),
+                onMapCreated: (controller) {},
+                markers: setMarker(),
+              ),
+      );
+
+  Future<Null> chooseImage(ImageSource source) async {
+    try {
+      var image = await ImagePicker().pickImage(
+        source: source,
+        maxHeight: 800,
+        maxWidth: 800,
+      );
+      setState(() {
+        _image = File(image!.path);
+      });
+    } catch (e) {}
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          buildCheckTypeUser(),
+        ],
+        title: const Text('Create New Account'),
+        backgroundColor: MyConstant.primary,
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(
+          FocusNode(),
+        ),
+        behavior: HitTestBehavior.opaque,
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildTitle('ข้อมูลทั่วไป :'),
+                  buildName(size),
+                  buildTitle('คุณคือ :'),
+                  buildRadioBuyer(),
+                  buildRadioSeller(),
+                  buildRadioRider(),
+                  buildTitle('ข้อมูลพื้นฐาน :'),
+                  buildNewAddress(size),
+                  buildPhone(size),
+                  buildUser(size),
+                  buildPassword(size),
+                  buildTitle('รูปภาพ: '),
+                  buildSubTitle(),
+                  buildAvatar(size),
+                  buildTitle('พิกัดของคุณ :'),
+                  buildMap(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  IconButton buildCheckTypeUser() {
+    return IconButton(
+          onPressed: () {
+            if(formKey.currentState!.validate()){
+              if(typeUser == null) {
+                print('Non Choose Type User');
+                MyDialog().normalDialog(context, 'Choose TypeUser', 'Please Tap Choose TypeUser');
+              }else {
+                print('Process Insert to Database');
+              }
+            }
+          },
+          icon: const Icon(Icons.cloud_upload),
+        );
+  }
+
   Row buildName(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
-          height: 50,
           child: TextFormField(
+            //controller: nameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'This field is required.';
+              } else {
+                return null;
+              }
+            },
             decoration: InputDecoration(
               labelStyle: MyConstant().t3Style(),
               labelText: 'Name :',
@@ -115,8 +226,14 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter a valod address.';
+              } else {}
+            },
             maxLines: 3,
             decoration: InputDecoration(
               hintText: 'Address :',
@@ -148,13 +265,18 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 15),
+          margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
-          height: 50,
           child: TextFormField(
+            keyboardType: TextInputType.phone,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter avalid Phone number.';
+              } else {}
+            },
             decoration: InputDecoration(
               labelStyle: MyConstant().t3Style(),
-              labelText: 'Phone :',
+              labelText: 'Phone number:',
               prefixIcon: Icon(
                 Icons.phone,
                 color: MyConstant.dark,
@@ -179,10 +301,14 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 15),
+          margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
-          height: 50,
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'This field is required.';
+              } else {}
+            },
             decoration: InputDecoration(
               labelStyle: MyConstant().t3Style(),
               labelText: 'User :',
@@ -210,10 +336,14 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 15),
+          margin: const EdgeInsets.only(top: 16),
           width: size * 0.75,
-          height: 50,
           child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'This field is required.';
+              } else {}
+            },
             obscureText: statusRedEye,
             decoration: InputDecoration(
               suffixIcon: IconButton(
@@ -251,82 +381,6 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create New Account'),
-        backgroundColor: MyConstant.primary,
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(
-          FocusNode(),
-        ),
-        behavior: HitTestBehavior.opaque,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          children: [
-            buildTitle('ข้อมูลทั่วไป :'),
-            buildName(size),
-            buildTitle('คุณคือ :'),
-            buildRadioBuyer(),
-            buildRadioSeller(),
-            buildRadioRider(),
-            buildTitle('ข้อมูลพื้นฐาน :'),
-            buildNewAddress(size),
-            buildPhone(size),
-            buildUser(size),
-            buildPassword(size),
-            buildTitle('รูปภาพ: '),
-            buildSubTitle(),
-            buildAvatar(size),
-            buildTitle('แสดงพิกัดของคุณ :'),
-            buildMap(),
-            buildTitle('แสดงพิกัดของคุณ :'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Set<Marker> setMarker() => <Marker>{
-    Marker(
-      markerId: const MarkerId('id'),
-      position: LatLng(lat!, lng!),
-      infoWindow:
-          InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
-    ),
-  };
-
-  Widget buildMap() => SizedBox(
-        width: double.infinity,
-        height: 250,
-        child: lat == null
-            ? const ShowProgress()
-            : GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(lat!, lng!),
-                  zoom: 16,
-                ),
-                onMapCreated: (controller) {},
-                markers: setMarker(),
-              ),
-      );
-
-  Future<Null> chooseImage(ImageSource source) async {
-    try {
-      var image = await ImagePicker().pickImage(
-        source: source,
-        maxHeight: 800,
-        maxWidth: 800,
-      );
-      setState(() {
-        _image = File(image!.path);
-      });
-    } catch (e) {}
   }
 
   Row buildAvatar(double size) {
