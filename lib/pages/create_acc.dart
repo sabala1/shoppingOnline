@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
+import 'package:shoppingonline/widgets/show_progress.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 import 'package:shoppingonline/universes/dialog.dart';
 
@@ -19,6 +20,7 @@ class _CreateAccountState extends State<CreateAccount> {
   String? typeUser;
   bool statusRedEye = true;
   File? _image;
+  double? lat, lng;
 
   @override
   void initState() {
@@ -31,26 +33,49 @@ class _CreateAccountState extends State<CreateAccount> {
     LocationPermission locationPermission;
 
     locationService = await Geolocator.isLocationServiceEnabled();
-    if(locationService) {
+    if (locationService) {
       print('Service Location open');
       locationPermission = await Geolocator.checkPermission();
-      if(locationPermission == LocationPermission.denied) {
+      if (locationPermission == LocationPermission.denied) {
         locationPermission = await Geolocator.requestPermission();
-        if(locationPermission == LocationPermission.deniedForever) {
-          MyDialog().alertLocationService(context, 'Allow Shar Location', 'Don\'t Shar Location');
-        }else {
-          //Find LatLng
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'Allow Shar Location', 'Don\'t Shar Location');
+        } else {
+          findLatLng();
         }
-      }else {
-        if(locationPermission == LocationPermission.deniedForever) {
-          MyDialog().alertLocationService(context, 'Allow Shar Location', 'Don\'t Shar Location');
-        }else {
-          //Find LatLng
+      } else {
+        if (locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(
+              context, 'Allow Shar Location', 'Don\'t Shar Location');
+        } else {
+          findLatLng();
         }
       }
-    }else {
+    } else {
       print('Service Location close');
-      MyDialog().alertLocationService(context, 'Turn on Location?', 'Pleases Turn on Your Location');
+      MyDialog().alertLocationService(
+          context, 'Turn on Location?', 'Pleases Turn on Your Location');
+    }
+  }
+
+  Future<Null> findLatLng() async {
+    print('findLatLng ==> Work!!');
+    Position? position = await findPosition();
+    setState(() {
+      lat = position!.latitude;
+      lng = position.longitude;
+      print('lat = $lat, lng = $lng');
+    });
+  }
+
+  Future<Position?> findPosition() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -59,7 +84,7 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: size*0.75,
+          width: size * 0.75,
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
@@ -89,7 +114,7 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: size*0.75,
+          width: size * 0.75,
           child: TextFormField(
             maxLines: 3,
             decoration: InputDecoration(
@@ -123,7 +148,7 @@ class _CreateAccountState extends State<CreateAccount> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 15),
-          width: size*0.75,
+          width: size * 0.75,
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
@@ -154,7 +179,7 @@ class _CreateAccountState extends State<CreateAccount> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 15),
-          width: size*0.75,
+          width: size * 0.75,
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
@@ -185,7 +210,7 @@ class _CreateAccountState extends State<CreateAccount> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 15),
-          width: size*0.75,
+          width: size * 0.75,
           height: 50,
           child: TextFormField(
             obscureText: statusRedEye,
@@ -257,13 +282,19 @@ class _CreateAccountState extends State<CreateAccount> {
             buildTitle('รูปภาพ: '),
             buildSubTitle(),
             buildAvatar(size),
-            buildSubTitle(),
-            buildSubTitle(),
+            buildTitle('แสดงพิกัดของคุณ :'),
+            buildMap(),
+            buildTitle('แสดงพิกัดของคุณ :'),
           ],
         ),
       ),
     );
   }
+
+  Widget buildMap() => SizedBox(
+      width: double.infinity,
+      height: 200,
+      child: lat == null ? const ShowProgress() : Text('Lat = $lat, Lng = $lng'),);
 
   Future<Null> chooseImage(ImageSource source) async {
     try {
@@ -292,7 +323,7 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16),
-          width: size*0.6,
+          width: size * 0.6,
           child: _image == null
               ? ShowImage(pathImage: MyConstant.avatar)
               : Image.file(_image!),
