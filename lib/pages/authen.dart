@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoppingonline/universes/constant.dart';
+import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
@@ -43,12 +43,12 @@ class _AuthenState extends State<Authen> {
               children: [
                 ShowTitle(
                   title: 'Non Account ? ',
-                  textStyle: Constant().t3Style(),
+                  textStyle: MyConstant().t3Style(),
                 ),
                 Container(
                   margin:  const EdgeInsets.only(right: 20),
                   child: GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, Constant.routeCreateAccount),
+                    onTap: () => Navigator.pushNamed(context, MyConstant.routeCreateAccount),
                     child: const Text('Create Account'),
                   ),
                 ),
@@ -64,7 +64,7 @@ class _AuthenState extends State<Authen> {
           margin: const EdgeInsets.symmetric(vertical: 15),
           width: size * 0.75,
           child: ElevatedButton(
-            style: Constant().b1Style(),
+            style: MyConstant().b1Style(),
             onPressed: () {},
             child: const Text('Login'),
           ),
@@ -83,18 +83,18 @@ class _AuthenState extends State<Authen> {
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'User :',
               prefixIcon: Icon(
                 Icons.account_circle_outlined,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -124,25 +124,25 @@ class _AuthenState extends State<Authen> {
                 icon: statusRedEye
                     ? Icon(
                         Icons.remove_red_eye,
-                        color: Constant.dark,
+                        color: MyConstant.dark,
                       )
                     : Icon(
                         Icons.remove_red_eye_outlined,
-                        color: Constant.dark,
+                        color: MyConstant.dark,
                       ),
               ),
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'Password :',
               prefixIcon: Icon(
                 Icons.lock_outline,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -157,8 +157,8 @@ class _AuthenState extends State<Authen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ShowTitle(
-          title: Constant.appName,
-          textStyle: Constant().t1Style(),
+          title: MyConstant.appName,
+          textStyle: MyConstant().t1Style(),
         ),
       ],
     );
@@ -170,7 +170,7 @@ class _AuthenState extends State<Authen> {
       children: [
         Container(
           width: size * 0.6,
-          child: ShowImage(pathImage: Constant.image1),
+          child: ShowImage(pathImage: MyConstant.image1),
         ),
       ],
     );

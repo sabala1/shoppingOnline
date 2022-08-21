@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Constant {
+class MyConstant {
   //General
   static String appName = 'Shopping Online';
   
@@ -38,7 +38,7 @@ class Constant {
   );
 
   ButtonStyle b1Style () => ElevatedButton.styleFrom(
-    primary: Constant.primary,
+    primary: MyConstant.primary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

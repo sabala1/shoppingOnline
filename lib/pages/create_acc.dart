@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shoppingonline/universes/constant.dart';
+import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
+import 'package:shoppingonline/universes/dialog.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
@@ -18,6 +20,40 @@ class _CreateAccountState extends State<CreateAccount> {
   bool statusRedEye = true;
   File? _image;
 
+  @override
+  void initState() {
+    super.initState();
+    checkPermission();
+  }
+
+  Future<Null> checkPermission() async {
+    bool locationService;
+    LocationPermission locationPermission;
+
+    locationService = await Geolocator.isLocationServiceEnabled();
+    if(locationService) {
+      print('Service Location open');
+      locationPermission = await Geolocator.checkPermission();
+      if(locationPermission == LocationPermission.denied) {
+        locationPermission = await Geolocator.requestPermission();
+        if(locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(context, 'Allow Shar Location', 'Don\'t Shar Location');
+        }else {
+          //Find LatLng
+        }
+      }else {
+        if(locationPermission == LocationPermission.deniedForever) {
+          MyDialog().alertLocationService(context, 'Allow Shar Location', 'Don\'t Shar Location');
+        }else {
+          //Find LatLng
+        }
+      }
+    }else {
+      print('Service Location close');
+      MyDialog().alertLocationService(context, 'Turn on Location?', 'Pleases Turn on Your Location');
+    }
+  }
+
   Row buildName(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -27,18 +63,18 @@ class _CreateAccountState extends State<CreateAccount> {
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'Name :',
               prefixIcon: Icon(
                 Icons.fingerprint,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -58,20 +94,20 @@ class _CreateAccountState extends State<CreateAccount> {
             maxLines: 3,
             decoration: InputDecoration(
               hintText: 'Address :',
-              hintStyle: Constant().t3Style(),
+              hintStyle: MyConstant().t3Style(),
               prefixIcon: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),
                 child: Icon(
                   Icons.home,
-                  color: Constant.dark,
+                  color: MyConstant.dark,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -91,18 +127,18 @@ class _CreateAccountState extends State<CreateAccount> {
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'Phone :',
               prefixIcon: Icon(
                 Icons.phone,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -122,18 +158,18 @@ class _CreateAccountState extends State<CreateAccount> {
           height: 50,
           child: TextFormField(
             decoration: InputDecoration(
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'User :',
               prefixIcon: Icon(
                 Icons.account_circle_outlined,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -163,25 +199,25 @@ class _CreateAccountState extends State<CreateAccount> {
                 icon: statusRedEye
                     ? Icon(
                         Icons.remove_red_eye,
-                        color: Constant.dark,
+                        color: MyConstant.dark,
                       )
                     : Icon(
                         Icons.remove_red_eye_outlined,
-                        color: Constant.dark,
+                        color: MyConstant.dark,
                       ),
               ),
-              labelStyle: Constant().t3Style(),
+              labelStyle: MyConstant().t3Style(),
               labelText: 'Password :',
               prefixIcon: Icon(
                 Icons.lock_outline,
-                color: Constant.dark,
+                color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.dark),
+                borderSide: BorderSide(color: MyConstant.dark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Constant.light),
+                borderSide: BorderSide(color: MyConstant.light),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -197,7 +233,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create New Account'),
-        backgroundColor: Constant.primary,
+        backgroundColor: MyConstant.primary,
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
@@ -258,7 +294,7 @@ class _CreateAccountState extends State<CreateAccount> {
           margin: const EdgeInsets.symmetric(vertical: 16),
           width: size*0.6,
           child: _image == null
-              ? ShowImage(pathImage: Constant.avatar)
+              ? ShowImage(pathImage: MyConstant.avatar)
               : Image.file(_image!),
         ),
         IconButton(
@@ -275,7 +311,7 @@ class _CreateAccountState extends State<CreateAccount> {
   ShowTitle buildSubTitle() {
     return ShowTitle(
       title: 'รูปภาพแสดงตัวตน   *ไม่บังคับ',
-      textStyle: Constant().t3Style(),
+      textStyle: MyConstant().t3Style(),
     );
   }
 
@@ -290,7 +326,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ซื้อ (Buyer)',
-        textStyle: Constant().t3Style(),
+        textStyle: MyConstant().t3Style(),
       ),
     );
   }
@@ -306,7 +342,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ขาย (Seller)',
-        textStyle: Constant().t3Style(),
+        textStyle: MyConstant().t3Style(),
       ),
     );
   }
@@ -322,7 +358,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ส่ง (Rider)',
-        textStyle: Constant().t3Style(),
+        textStyle: MyConstant().t3Style(),
       ),
     );
   }
@@ -332,7 +368,7 @@ class _CreateAccountState extends State<CreateAccount> {
       margin: EdgeInsets.symmetric(vertical: 16),
       child: ShowTitle(
         title: title,
-        textStyle: Constant().t2Style(),
+        textStyle: MyConstant().t2Style(),
       ),
     );
   }
