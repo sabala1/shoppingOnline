@@ -17,6 +17,7 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
+  
   bool statusRedEye = true;
   final formKey = GlobalKey<FormState>();
   TextEditingController userController = TextEditingController();
@@ -77,8 +78,9 @@ class _AuthenState extends State<Authen> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 15),
           width: size * 0.75,
+          height: 45,
           child: ElevatedButton(
-            style: MyConstant().b1Style(),
+            style: MyConstant().bg1Style(),
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 String user = userController.text;
@@ -87,7 +89,10 @@ class _AuthenState extends State<Authen> {
                 checkAuthen(user: user, password: password);
               }
             },
-            child: const Text('Login'),
+            child: const Text(
+              'Login',
+              style: TextStyle(fontSize: 18),
+            ),
           ),
         ),
       ],
@@ -111,7 +116,8 @@ class _AuthenState extends State<Authen> {
             String type = model.type;
             print('## Authen Success in Type ==>> $type');
 
-            SharedPreferences preferences = await SharedPreferences.getInstance();
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
             preferences.setString('type', type);
             preferences.setString('user', model.user);
             switch (type) {
@@ -127,7 +133,7 @@ class _AuthenState extends State<Authen> {
                 Navigator.pushNamedAndRemoveUntil(
                     context, MyConstant.routeRiderService, (route) => false);
                 break;
-                default:
+              default:
             }
           } else {
             //Authen Fales
@@ -168,6 +174,14 @@ class _AuthenState extends State<Authen> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinklight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -222,6 +236,14 @@ class _AuthenState extends State<Authen> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinklight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

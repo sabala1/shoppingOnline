@@ -65,4 +65,22 @@ class MyDialog {
       ),
     );
   }
+
+  Future<Null> showProcressDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) => WillPopScope(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Center(
+              child: LinearProgressIndicator(
+                color: MyConstant.bluelight,
+              ),
+            ),
+          ),
+          onWillPop: () async {
+            return false;
+          }),
+    );
+  }
 }

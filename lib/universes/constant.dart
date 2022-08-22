@@ -11,10 +11,12 @@ class MyConstant {
   static String routeBuyerService = '/buyerService';
   static String routeSellerervice = '/sellerService';
   static String routeRiderService = '/riderService';
+  static String routeAddProduct = '/addProduct';
 
   //Image
   static String image1 = 'images/Delivery1.png';
   static String avatar = 'images/avatar.png';
+  static String avatar1 = 'images/avatar1.png';
 
   //Color
   static Color primary = const Color(0xffe57373);
@@ -22,6 +24,8 @@ class MyConstant {
   static Color pinklight = const Color(0xffffa4a2);
   static Color bluedark = const Color(0xff00227b);
   static Color bluelight = const Color(0xff3949ab);
+  static Color blackdark = const Color(0xff000000);
+  static Color errorvalidate = const Color(0xffFF0000);
 
   //Style
   TextStyle p1Style() => TextStyle(
@@ -49,8 +53,18 @@ class MyConstant {
     color: Colors.white,
     fontWeight: FontWeight.normal
   );
+  TextStyle b2Style() => TextStyle(
+    fontSize: 18,
+    color: blackdark,
+    fontWeight: FontWeight.w700,
+  );
+  TextStyle b3Style() => TextStyle(
+    fontSize: 14,
+    color: blackdark,
+    fontWeight: FontWeight.normal,
+  );
 
-  ButtonStyle b1Style () => ElevatedButton.styleFrom(
+  ButtonStyle bg1Style () => ElevatedButton.styleFrom(
     backgroundColor: MyConstant.primary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

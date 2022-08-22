@@ -216,7 +216,7 @@ class _CreateAccountState extends State<CreateAccount> {
             //Have Avatar
             String apiSaveAvatar =
                 '${MyConstant.domain}/shoppingonline/saveAvatar.php';
-            int i = Random().nextInt(100000);
+            int i = Random().nextInt(100000000);
             String nameAvatar = 'avatar$i.jpg';
             Map<String, dynamic> map = Map();
             map['file'] = await MultipartFile.fromFile(_image!.path,
@@ -286,6 +286,14 @@ class _CreateAccountState extends State<CreateAccount> {
                 borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
@@ -326,6 +334,14 @@ class _CreateAccountState extends State<CreateAccount> {
                 borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
@@ -363,6 +379,14 @@ class _CreateAccountState extends State<CreateAccount> {
                 borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
         ),
@@ -397,6 +421,14 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinklight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -450,6 +482,14 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinklight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
