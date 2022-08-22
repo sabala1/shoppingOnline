@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/universes/dialog.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
@@ -20,9 +21,9 @@ class _AddProductState extends State<AddProduct> {
   final formKey = GlobalKey<FormState>();
   List<File?> files = [];
   File? _image;
-  TextEditingController productnameController = TextEditingController();
-  TextEditingController productpriceController = TextEditingController();
-  TextEditingController productdetailController = TextEditingController();
+  TextEditingController pdnameController = TextEditingController();
+  TextEditingController pdpriceController = TextEditingController();
+  TextEditingController pddetailController = TextEditingController();
 
   @override
   void initState() {
@@ -156,10 +157,20 @@ class _AddProductState extends State<AddProduct> {
           map['file'] =
               await MultipartFile.fromFile(_image!.path, filename: nameProduct);
           FormData data = FormData.fromMap(map);
-          await Dio().post(apiSaveProduct, data: data).then((value) {
+          await Dio().post(apiSaveProduct, data: data).then((value) async {
             print('Upload Success');
             loop ++;
             if(loop >= files.length) {
+              SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+
+              String? idSeller = preferences.getString('id');
+              String? nameSeller = preferences.getString('name');
+              String? name = pdnameController.text;
+              String? price = pdpriceController.text;
+              String? detail = pddetailController.text;
+              print('## idSeller = $idSeller, nameSeller = $nameSeller');
+              print('## name = $name, price = $price, detail = $detail');
               Navigator.pop(context);
             }
           },);
@@ -247,7 +258,7 @@ class _AddProductState extends State<AddProduct> {
           margin: const EdgeInsets.only(top: 15),
           width: size * 0.8,
           child: TextFormField(
-            controller: productnameController,
+            controller: pdnameController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -290,7 +301,7 @@ class _AddProductState extends State<AddProduct> {
           width: size * 0.8,
           child: TextFormField(
             keyboardType: TextInputType.number,
-            controller: productpriceController,
+            controller: pdpriceController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -333,7 +344,7 @@ class _AddProductState extends State<AddProduct> {
           width: size * 0.8,
           child: TextFormField(
             maxLines: 4,
-            controller: productdetailController,
+            controller: pddetailController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';

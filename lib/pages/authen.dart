@@ -17,7 +17,6 @@ class Authen extends StatefulWidget {
 }
 
 class _AuthenState extends State<Authen> {
-  
   bool statusRedEye = true;
   final formKey = GlobalKey<FormState>();
   TextEditingController userController = TextEditingController();
@@ -118,8 +117,10 @@ class _AuthenState extends State<Authen> {
 
             SharedPreferences preferences =
                 await SharedPreferences.getInstance();
+            preferences.setString('id', model.id);
             preferences.setString('type', type);
             preferences.setString('user', model.user);
+            preferences.setString('name', model.name);
             switch (type) {
               case 'buyer':
                 Navigator.pushNamedAndRemoveUntil(

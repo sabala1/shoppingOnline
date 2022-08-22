@@ -242,7 +242,7 @@ class _CreateAccountState extends State<CreateAccount> {
       String? password}) async {
     print('## processInsertMySQL Work & avatar ==>> $avatar');
     String apiInsertUser =
-        '${MyConstant.domain}/shoppingonline/insertData.php?isAdd=true&name=$name&type=$typeUser&address=$address&phone=$phone&user=$user&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
+        '${MyConstant.domain}/shoppingonline/insertUser.php?isAdd=true&name=$name&type=$typeUser&address=$address&phone=$phone&user=$user&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
     
     await Dio().get(apiInsertUser).then(
       (value) {
