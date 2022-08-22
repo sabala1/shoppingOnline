@@ -18,28 +18,40 @@ class MyConstant {
 
   //Color
   static Color primary = const Color(0xffe57373);
-  static Color dark = const Color(0xffaf4448);
-  static Color light = const Color(0xffffa4a2);
+  static Color pinkdark = const Color(0xffaf4448);
+  static Color pinklight = const Color(0xffffa4a2);
+  static Color bluedark = const Color(0xff00227b);
+  static Color bluelight = const Color(0xff3949ab);
 
   //Style
-  TextStyle t1Style() => TextStyle(
+  TextStyle p1Style() => TextStyle(
     fontSize: 24,
-    color: dark,
+    color: pinkdark,
     fontWeight: FontWeight.bold
   );
-  TextStyle t2Style() => TextStyle(
+  TextStyle p2Style() => TextStyle(
     fontSize: 18,
-    color: dark,
+    color: pinkdark,
     fontWeight: FontWeight.w700,
   );
-  TextStyle t3Style() => TextStyle(
+  TextStyle p2whiteStyle() => const TextStyle(
+    fontSize: 18,
+    color: Colors.white,
+    fontWeight: FontWeight.w700,
+  );
+  TextStyle p3Style() => TextStyle(
     fontSize: 14,
-    color: dark,
+    color: pinkdark,
+    fontWeight: FontWeight.normal
+  );
+    TextStyle p3whiteStyle() => const TextStyle(
+    fontSize: 14,
+    color: Colors.white,
     fontWeight: FontWeight.normal
   );
 
   ButtonStyle b1Style () => ElevatedButton.styleFrom(
-    primary: MyConstant.primary,
+    backgroundColor: MyConstant.primary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

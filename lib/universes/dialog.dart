@@ -18,11 +18,11 @@ class MyDialog {
           ),
           title: ShowTitle(
             title: title,
-            textStyle: MyConstant().t1Style(),
+            textStyle: MyConstant().p1Style(),
           ),
           subtitle: ShowTitle(
             title: message,
-            textStyle: MyConstant().t3Style(),
+            textStyle: MyConstant().p3Style(),
           ),
         ),
         actions: [
@@ -49,17 +49,17 @@ class MyDialog {
           ),
           title: ShowTitle(
             title: title,
-            textStyle: MyConstant().t2Style(),
+            textStyle: MyConstant().p2Style(),
           ),
           subtitle: ShowTitle(
             title: message,
-            textStyle: MyConstant().t3Style(),
+            textStyle: MyConstant().p3Style(),
           ),
         ),
         children: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),

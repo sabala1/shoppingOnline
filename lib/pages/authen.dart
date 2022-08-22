@@ -56,7 +56,7 @@ class _AuthenState extends State<Authen> {
       children: [
         ShowTitle(
           title: 'Non Account ? ',
-          textStyle: MyConstant().t3Style(),
+          textStyle: MyConstant().p3Style(),
         ),
         Container(
           margin: const EdgeInsets.only(right: 20),
@@ -156,18 +156,18 @@ class _AuthenState extends State<Authen> {
               }
             },
             decoration: InputDecoration(
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'User :',
               prefixIcon: Icon(
                 Icons.account_circle_outlined,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -203,25 +203,25 @@ class _AuthenState extends State<Authen> {
                 icon: statusRedEye
                     ? Icon(
                         Icons.remove_red_eye,
-                        color: MyConstant.dark,
+                        color: MyConstant.pinkdark,
                       )
                     : Icon(
                         Icons.remove_red_eye_outlined,
-                        color: MyConstant.dark,
+                        color: MyConstant.pinkdark,
                       ),
               ),
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'Password :',
               prefixIcon: Icon(
                 Icons.lock_outline,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -237,7 +237,7 @@ class _AuthenState extends State<Authen> {
       children: [
         ShowTitle(
           title: MyConstant.appName,
-          textStyle: MyConstant().t1Style(),
+          textStyle: MyConstant().p1Style(),
         ),
       ],
     );

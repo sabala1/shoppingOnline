@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../universes/Constant.dart';
+import '../widgets/show_signout.dart';
+
 class SellerService extends StatefulWidget {
   const SellerService({ Key? key }) : super(key: key);
 
@@ -12,7 +15,11 @@ class _SellerServiceState extends State<SellerService> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seller'),
+        backgroundColor: MyConstant.primary,
+        title: const Text('Seller'),
+      ),
+      drawer: const Drawer(
+        child: ShowSignOut(),
       ),
     );
   }

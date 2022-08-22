@@ -272,18 +272,18 @@ class _CreateAccountState extends State<CreateAccount> {
               }
             },
             decoration: InputDecoration(
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'Name :',
               prefixIcon: Icon(
                 Icons.account_circle,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -310,20 +310,20 @@ class _CreateAccountState extends State<CreateAccount> {
             maxLines: 3,
             decoration: InputDecoration(
               hintText: 'Address :',
-              hintStyle: MyConstant().t3Style(),
+              hintStyle: MyConstant().p3Style(),
               prefixIcon: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 45),
                 child: Icon(
                   Icons.home,
-                  color: MyConstant.dark,
+                  color: MyConstant.pinkdark,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -349,18 +349,18 @@ class _CreateAccountState extends State<CreateAccount> {
               } else {}
             },
             decoration: InputDecoration(
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'Phone number:',
               prefixIcon: Icon(
                 Icons.phone,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -385,18 +385,18 @@ class _CreateAccountState extends State<CreateAccount> {
               } else {}
             },
             decoration: InputDecoration(
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'User :',
               prefixIcon: Icon(
                 Icons.account_circle_outlined,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -431,25 +431,25 @@ class _CreateAccountState extends State<CreateAccount> {
                 icon: statusRedEye
                     ? Icon(
                         Icons.remove_red_eye,
-                        color: MyConstant.dark,
+                        color: MyConstant.pinkdark,
                       )
                     : Icon(
                         Icons.remove_red_eye_outlined,
-                        color: MyConstant.dark,
+                        color: MyConstant.pinkdark,
                       ),
               ),
-              labelStyle: MyConstant().t3Style(),
+              labelStyle: MyConstant().p3Style(),
               labelText: 'Password :',
               prefixIcon: Icon(
                 Icons.lock_outline,
-                color: MyConstant.dark,
+                color: MyConstant.pinkdark,
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.dark),
+                borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.light),
+                borderSide: BorderSide(color: MyConstant.pinklight),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -492,7 +492,7 @@ class _CreateAccountState extends State<CreateAccount> {
   ShowTitle buildSubTitle() {
     return ShowTitle(
       title: 'รูปภาพแสดงตัวตน   *ไม่บังคับ',
-      textStyle: MyConstant().t3Style(),
+      textStyle: MyConstant().p3Style(),
     );
   }
 
@@ -507,7 +507,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ซื้อ (Buyer)',
-        textStyle: MyConstant().t3Style(),
+        textStyle: MyConstant().p3Style(),
       ),
     );
   }
@@ -523,7 +523,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ขาย (Seller)',
-        textStyle: MyConstant().t3Style(),
+        textStyle: MyConstant().p3Style(),
       ),
     );
   }
@@ -539,7 +539,7 @@ class _CreateAccountState extends State<CreateAccount> {
       },
       title: ShowTitle(
         title: 'ผู้ส่ง (Rider)',
-        textStyle: MyConstant().t3Style(),
+        textStyle: MyConstant().p3Style(),
       ),
     );
   }
@@ -549,7 +549,7 @@ class _CreateAccountState extends State<CreateAccount> {
       margin: const EdgeInsets.symmetric(vertical: 16),
       child: ShowTitle(
         title: title,
-        textStyle: MyConstant().t2Style(),
+        textStyle: MyConstant().p2Style(),
       ),
     );
   }
