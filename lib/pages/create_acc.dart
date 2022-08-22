@@ -200,9 +200,7 @@ class _CreateAccountState extends State<CreateAccount> {
     String user = userController.text;
     String password = passwordController.text;
     print(
-        '## name = $name, address = $phone, user = $user, password = $password');
-
-    //await Dio().get('https://7e2d-2405-9800-ba10-f0ca-483c-802f-5def-8a6.ngrok.io/shoppingmall/getUserWhereUser.php?isAdd=true&user=$user').then((value) => print('## value ==>> $value'),);
+        '## name = $name, address = $address, phone = $phone, user = $user, password = $password');
     String path =
         '${MyConstant.domain}/shoppingonline/getUserWhereUser.php?isAdd=true&user=$user';
 
@@ -213,7 +211,7 @@ class _CreateAccountState extends State<CreateAccount> {
           print('## user OK');
           if (_image == null) {
             //No Avatar
-            processInsertMySQL();
+            processInsertMySQL(name: name, address: address, phone: phone, user: user, password: password);
           } else {
             //Have Avatar
             String apiSaveAvatar =
@@ -226,7 +224,7 @@ class _CreateAccountState extends State<CreateAccount> {
             FormData data = FormData.fromMap(map);
             await Dio().post(apiSaveAvatar, data: data).then((value) {
               avatar = '/shoppingonline/avatar/$nameAvatar';
-              processInsertMySQL();
+              processInsertMySQL(name: name, address: address, phone: phone, user: user, password: password);
             });
           }
         } else {
@@ -236,8 +234,25 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Future<Null> processInsertMySQL() async {
+  Future<Null> processInsertMySQL(
+      {String? name,
+      String? address,
+      String? phone,
+      String? user,
+      String? password}) async {
     print('## processInsertMySQL Work & avatar ==>> $avatar');
+    String apiInsertUser =
+        '${MyConstant.domain}/shoppingonline/insertData.php?isAdd=true&name=$name&type=$typeUser&address=$address&phone=$phone&user=$user&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
+    
+    await Dio().get(apiInsertUser).then(
+      (value) {
+      if (value.toString() == 'true') {
+        Navigator.pop(context);
+      } else {
+        MyDialog().normalDialog(
+            context, 'Create New User False!!', 'Please Try Again');
+      }
+    });
   }
 
   Row buildName(double size) {
@@ -260,7 +275,7 @@ class _CreateAccountState extends State<CreateAccount> {
               labelStyle: MyConstant().t3Style(),
               labelText: 'Name :',
               prefixIcon: Icon(
-                Icons.fingerprint,
+                Icons.account_circle,
                 color: MyConstant.dark,
               ),
               enabledBorder: OutlineInputBorder(
