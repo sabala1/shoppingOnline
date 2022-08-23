@@ -24,6 +24,7 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController pdnameController = TextEditingController();
   TextEditingController pdpriceController = TextEditingController();
   TextEditingController pddetailController = TextEditingController();
+  List<String> paths = [];
 
   @override
   void initState() {
@@ -146,34 +147,50 @@ class _AddProductState extends State<AddProduct> {
       if (checkFile) {
         print('## choose 4 image success');
         MyDialog().showProcressDialog(context);
-        String apiSaveProduct = '${MyConstant.domain}/shoppingonline/saveProduct.php';
+        String apiSaveProduct =
+            '${MyConstant.domain}/shoppingonline/saveProduct.php';
         print('## apiSaveProduct ==>> $apiSaveProduct');
 
         int loop = 0;
         for (var _image in files) {
           int i = Random().nextInt(100000000);
           String nameProduct = 'product$i.jpg';
+
+          paths.add('/product/$nameProduct');
+
           Map<String, dynamic> map = {};
           map['file'] =
               await MultipartFile.fromFile(_image!.path, filename: nameProduct);
           FormData data = FormData.fromMap(map);
-          await Dio().post(apiSaveProduct, data: data).then((value) async {
-            print('Upload Success');
-            loop ++;
-            if(loop >= files.length) {
-              SharedPreferences preferences =
-                  await SharedPreferences.getInstance();
+          await Dio().post(apiSaveProduct, data: data).then(
+            (value) async {
+              print('Upload Success');
+              loop++;
+              if (loop >= files.length) {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
 
-              String? idSeller = preferences.getString('id');
-              String? nameSeller = preferences.getString('name');
-              String? name = pdnameController.text;
-              String? price = pdpriceController.text;
-              String? detail = pddetailController.text;
-              print('## idSeller = $idSeller, nameSeller = $nameSeller');
-              print('## name = $name, price = $price, detail = $detail');
-              Navigator.pop(context);
-            }
-          },);
+                String? idSeller = preferences.getString('id');
+                String? nameSeller = preferences.getString('name');
+                String? name = pdnameController.text;
+                String? price = pdpriceController.text;
+                String? detail = pddetailController.text;
+                String? images = paths.toString();
+                print('## idSeller = $idSeller, nameSeller = $nameSeller');
+                print('## name = $name, price = $price, detail = $detail');
+                print('## images ==>> $images');
+
+                String path =
+                    '${MyConstant.domain}/shoppingonline/insertProduct.php?isAdd=true&idSeller=$idSeller&nameSeller=$nameSeller&name=$name&price=$price&detail=$detail&images=$images';
+
+                await Dio().get(path).then(
+                      (value) => Navigator.pop(context),
+                    );
+
+                Navigator.pop(context);
+              }
+            },
+          );
         }
       }
     } else {
