@@ -48,7 +48,7 @@ class MyConstant {
     color: pinkdark,
     fontWeight: FontWeight.normal
   );
-    TextStyle p3whiteStyle() => const TextStyle(
+  TextStyle p3whiteStyle() => const TextStyle(
     fontSize: 14,
     color: Colors.white,
     fontWeight: FontWeight.normal
