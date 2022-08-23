@@ -40,6 +40,7 @@ dependencies:
   google_maps_flutter: ^2.1.12
   dio: ^4.0.6
   shared_preferences: ^2.0.14
+  cached_network_image: ^3.2.0
 
 dev_dependencies:
   flutter_test:
