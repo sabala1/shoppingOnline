@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ProductModel {
@@ -18,8 +17,6 @@ class ProductModel {
     required this.detail,
     required this.images,
   });
-
-
 
   ProductModel copyWith({
     String? id,
@@ -42,7 +39,7 @@ class ProductModel {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'idSeller': idSeller,
       'nameSeller': nameSeller,
@@ -55,30 +52,30 @@ class ProductModel {
 
   factory ProductModel.fromMap(Map<String, dynamic> map) {
     return ProductModel(
-      id: map['id'] as String,
-      idSeller: map['idSeller'] as String,
-      nameSeller: map['nameSeller'] as String,
-      name: map['name'] as String,
-      price: map['price'] as String,
-      detail: map['detail'] as String,
-      images: map['images'] as String,
+      id: map['id'],
+      idSeller: map['idSeller'],
+      nameSeller: map['nameSeller'],
+      name: map['name'],
+      price: map['price'],
+      detail: map['detail'],
+      images: map['images'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ProductModel.fromJson(String source) => ProductModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductModel.fromJson(String source) => ProductModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ProductMOdel(id: $id, idSeller: $idSeller, nameSeller: $nameSeller, name: $name, price: $price, detail: $detail, images: $images)';
+    return 'ProductModel(id: $id, idSeller: $idSeller, nameSeller: $nameSeller, name: $name, price: $price, detail: $detail, images: $images)';
   }
 
   @override
-  bool operator ==(covariant ProductModel other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
   
-    return 
+    return other is ProductModel &&
       other.id == id &&
       other.idSeller == idSeller &&
       other.nameSeller == nameSeller &&

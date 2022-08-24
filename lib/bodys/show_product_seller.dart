@@ -7,8 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/models/product.dart';
 import 'package:shoppingonline/universes/constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
-import 'package:shoppingonline/widgets/show_progress.dart';
+import 'package:shoppingonline/widgets/show_progress_linear.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
+
+import '../widgets/show_progress_circular.dart';
 
 class ShowProductSeller extends StatefulWidget {
   const ShowProductSeller({super.key});
@@ -30,6 +32,12 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
   }
 
   Future<Null> loadValueFromAPI() async {
+
+    if(productModels.length != 0) {
+      productModels.clear();
+    }else {
+
+    }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? id = preferences.getString('id');
 
@@ -48,9 +56,7 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
         } else {
           //Have Data
           for (var item in json.decode(value.data)) {
-            ProductModel model = ProductModel.fromMap(
-              json.decode(value.data),
-            );
+            ProductModel model = ProductModel.fromMap(item);
             print('## name Product ==>> ${model.name}');
 
             setState(() {
@@ -68,8 +74,9 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       body: load
-          ? ShowProgress()
+          ? ShowProgressLinear()
           : haveData!
               ? ListView.builder(
                   itemCount: productModels.length,
@@ -95,7 +102,8 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
                                   fit: BoxFit.cover,
                                   imageUrl:
                                       createUrl(productModels[index].images),
-                                  placeholder: (context, url) => ShowProgress(),
+                                  placeholder: (context, url) =>
+                                      ShowProgressCircular(),
                                   errorWidget: (context, url, error) =>
                                       ShowImage(pathImage: MyConstant.image1),
                                 ),
@@ -121,9 +129,9 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
                                 title: productModels[index].detail,
                                 textStyle: MyConstant().b3Style(),
                               ),
-                              Column(
+                              Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   IconButton(
                                     onPressed: () {},
@@ -166,7 +174,7 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyConstant.pinkdark,
         onPressed: () =>
-            Navigator.pushNamed(context, MyConstant.routeAddProduct),
+            Navigator.pushNamed(context, MyConstant.routeAddProduct).then((value) => loadValueFromAPI(),),
         child: Text('Add'),
       ),
     );
@@ -186,7 +194,7 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
         title: ListTile(
           leading: CachedNetworkImage(
             imageUrl: createUrl(productModel.images),
-            placeholder: (context, url) => ShowProgress(),
+            placeholder: (context, url) => ShowProgressLinear(),
           ),
           title: ShowTitle(
             title: 'Delete ${productModel.name} ?',
@@ -195,7 +203,17 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () async {
+              print('## You Confrim Delete at id ==>> ${productModel.id}');
+              String apiDeleteProductWhereId =
+                  '${MyConstant.domain}/shoppingonline/deleteProductWhereId.php?isAdd=true&id=${productModel.id}';
+              await Dio().get(apiDeleteProductWhereId).then(
+                (value) {
+                  Navigator.pop(context);
+                  loadValueFromAPI();
+                },
+              );
+            },
             child: Text('Delete'),
           ),
           TextButton(

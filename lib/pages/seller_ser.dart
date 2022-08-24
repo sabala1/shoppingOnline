@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../body/shop_manage_seller.dart';
-import '../body/show_oder_seller.dart';
-import '../body/show_product_seller.dart';
+import '../bodys/shop_manage_seller.dart';
+import '../bodys/show_oder_seller.dart';
+import '../bodys/show_product_seller.dart';
 import '../universes/Constant.dart';
 import '../widgets/show_signout.dart';
 

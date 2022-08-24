@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
-import 'package:shoppingonline/widgets/show_progress.dart';
+import 'package:shoppingonline/widgets/show_progress_linear.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 import 'package:shoppingonline/universes/dialog.dart';
 
@@ -102,7 +102,7 @@ class _CreateAccountState extends State<CreateAccount> {
         width: double.infinity,
         height: 250,
         child: lat == null
-            ? const ShowProgress()
+            ? const ShowProgressLinear()
             : GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(lat!, lng!),
