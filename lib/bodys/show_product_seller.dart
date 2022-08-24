@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/models/product.dart';
+import 'package:shoppingonline/pages/edit_product.dart';
 import 'package:shoppingonline/universes/constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_progress_linear.dart';
@@ -32,12 +34,9 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
   }
 
   Future<Null> loadValueFromAPI() async {
-
-    if(productModels.length != 0) {
+    if (productModels.length != 0) {
       productModels.clear();
-    }else {
-
-    }
+    } else {}
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? id = preferences.getString('id');
 
@@ -81,82 +80,87 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
               ? ListView.builder(
                   itemCount: productModels.length,
                   itemBuilder: (context, index) => Card(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          width: size * 0.5 - 4,
-                          height: size * 0.5,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ShowTitle(
-                                title: productModels[index].name,
-                                textStyle: MyConstant().b2Style(),
-                              ),
-                              Container(
-                                width: size * 0.5,
-                                height: size * 0.4,
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.cover,
-                                  imageUrl:
-                                      createUrl(productModels[index].images),
-                                  placeholder: (context, url) =>
-                                      ShowProgressCircular(),
-                                  errorWidget: (context, url, error) =>
-                                      ShowImage(pathImage: MyConstant.image1),
+                    child: Slidable(
+                      endActionPane: ActionPane(
+                        motion: ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProduct(productModel: productModels[index],),
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+                            backgroundColor: MyConstant.pinklight,
+                            foregroundColor: Colors.white,
+                            icon: Icons.edit_outlined,
+                            label: 'Edit',
                           ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 20),
-                          padding: EdgeInsets.all(4),
-                          width: size * 0.5 - 4,
-                          height: size * 0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ShowTitle(
-                                title:
-                                    'Price ${productModels[index].price} THB',
-                                textStyle: MyConstant().b2Style(),
-                              ),
-                              ShowTitle(
-                                title: productModels[index].detail,
-                                textStyle: MyConstant().b3Style(),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.edit_outlined,
-                                      size: 36,
-                                      color: MyConstant.blackdark,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      confirmDialogDelete(productModels[index]);
-                                    },
-                                    icon: Icon(
-                                      Icons.delete_outline,
-                                      size: 36,
-                                      color: MyConstant.blackdark,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                          SlidableAction(
+                            onPressed: (context) {
+                              confirmDialogDelete(productModels[index]);
+                            },
+                            backgroundColor: MyConstant.bluelight,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete_outline,
+                            label: 'Delete',
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(4),
+                            width: size * 0.5 - 4,
+                            height: size * 0.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ShowTitle(
+                                  title: productModels[index].name,
+                                  textStyle: MyConstant().b2Style(),
+                                ),
+                                Container(
+                                  width: size * 0.5,
+                                  height: size * 0.4,
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl:
+                                        createUrl(productModels[index].images),
+                                    placeholder: (context, url) =>
+                                        ShowProgressCircular(),
+                                    errorWidget: (context, url, error) =>
+                                        ShowImage(pathImage: MyConstant.image1),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.all(4),
+                            width: size * 0.5 - 4,
+                            height: size * 0.4,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ShowTitle(
+                                  title:
+                                      'Price ${productModels[index].price} THB',
+                                  textStyle: MyConstant().b2Style(),
+                                ),
+                                ShowTitle(
+                                  title: productModels[index].detail,
+                                  textStyle: MyConstant().b3Style(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -174,7 +178,9 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyConstant.pinkdark,
         onPressed: () =>
-            Navigator.pushNamed(context, MyConstant.routeAddProduct).then((value) => loadValueFromAPI(),),
+            Navigator.pushNamed(context, MyConstant.routeAddProduct).then(
+          (value) => loadValueFromAPI(),
+        ),
         child: Text('Add'),
       ),
     );
