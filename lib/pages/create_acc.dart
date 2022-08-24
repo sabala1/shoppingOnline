@@ -113,7 +113,7 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
       );
 
-  Future<Null> chooseImage(ImageSource source) async {
+  Future<Null> processImagePicker(ImageSource source) async {
     try {
       var image = await ImagePicker().pickImage(
         source: source,
@@ -217,13 +217,13 @@ class _CreateAccountState extends State<CreateAccount> {
             String apiSaveAvatar =
                 '${MyConstant.domain}/shoppingonline/saveAvatar.php';
             int i = Random().nextInt(100000000);
-            String nameAvatar = 'avatar$i.jpg';
+            String nameImageAvatar = 'avatar$i.jpg';
             Map<String, dynamic> map = Map();
             map['file'] = await MultipartFile.fromFile(_image!.path,
-                filename: nameAvatar);
+                filename: nameImageAvatar);
             FormData data = FormData.fromMap(map);
             await Dio().post(apiSaveAvatar, data: data).then((value) {
-              avatar = '/shoppingonline/avatar/$nameAvatar';
+              avatar = '/shoppingonline/avatar/$nameImageAvatar';
               processInsertMySQL(name: name, address: address, phone: phone, user: user, password: password);
             });
           }
@@ -345,6 +345,7 @@ class _CreateAccountState extends State<CreateAccount> {
             ),
           ),
         ),
+      
       ],
     );
   }
@@ -505,7 +506,7 @@ class _CreateAccountState extends State<CreateAccount> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          onPressed: () => chooseImage(ImageSource.camera),
+          onPressed: () => processImagePicker(ImageSource.camera),
           icon: const Icon(
             Icons.add_a_photo,
             size: 36,
@@ -519,7 +520,7 @@ class _CreateAccountState extends State<CreateAccount> {
               : Image.file(_image!),
         ),
         IconButton(
-          onPressed: () => chooseImage(ImageSource.gallery),
+          onPressed: () => processImagePicker(ImageSource.gallery),
           icon: const Icon(
             Icons.add_photo_alternate,
             size: 36,

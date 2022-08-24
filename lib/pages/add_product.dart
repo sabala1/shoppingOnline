@@ -20,11 +20,11 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   final formKey = GlobalKey<FormState>();
   List<File?> files = [];
+  List<String> paths = [];
   File? _image;
   TextEditingController pdnameController = TextEditingController();
   TextEditingController pdpriceController = TextEditingController();
   TextEditingController pddetailController = TextEditingController();
-  List<String> paths = [];
 
   @override
   void initState() {
@@ -154,13 +154,13 @@ class _AddProductState extends State<AddProduct> {
         int loop = 0;
         for (var _image in files) {
           int i = Random().nextInt(100000000);
-          String nameProduct = 'product$i.jpg';
+          String nameImage = 'product$i.jpg';
 
-          paths.add('/product/$nameProduct');
+          paths.add('/product/$nameImage');
 
           Map<String, dynamic> map = {};
           map['file'] =
-              await MultipartFile.fromFile(_image!.path, filename: nameProduct);
+              await MultipartFile.fromFile(_image!.path, filename: nameImage);
           FormData data = FormData.fromMap(map);
           await Dio().post(apiSaveProduct, data: data).then(
             (value) async {
