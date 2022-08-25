@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:shoppingonline/universes/Constant.dart';
+import 'package:shoppingonline/utillity/constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 

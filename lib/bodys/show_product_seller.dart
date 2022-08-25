@@ -7,11 +7,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/models/product.dart';
 import 'package:shoppingonline/pages/edit_product.dart';
-import 'package:shoppingonline/universes/constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_progress_linear.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
+import '../utillity/constant.dart';
 import '../widgets/show_progress_circular.dart';
 
 class ShowProductSeller extends StatefulWidget {
@@ -73,7 +73,7 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.grey.shade300,
       body: load
           ? ShowProgressLinear()
           : haveData!
@@ -178,12 +178,12 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
                   ),
                 ),
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         backgroundColor: MyConstant.pinkdark,
         onPressed: () =>
             Navigator.pushNamed(context, MyConstant.routeAddProduct).then(
           (value) => loadValueFromAPI(),
         ),
-        child: Text('Add'),
       ),
     );
   }

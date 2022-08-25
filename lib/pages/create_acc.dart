@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shoppingonline/universes/Constant.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_progress_linear.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
-import 'package:shoppingonline/universes/dialog.dart';
+
+import '../utillity/constant.dart';
+import '../utillity/dialog.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
@@ -90,13 +91,13 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   Set<Marker> setMarker() => <Marker>{
-        Marker(
-          markerId: const MarkerId('id'),
-          position: LatLng(lat!, lng!),
-          infoWindow:
-              InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
-        ),
-      };
+    Marker(
+      markerId: const MarkerId('id'),
+      position: LatLng(lat!, lng!),
+      infoWindow:
+          InfoWindow(title: 'You Here', snippet: 'Lat = $lat, lng = $lng'),
+    ),
+  };
 
   Widget buildMap() => SizedBox(
         width: double.infinity,

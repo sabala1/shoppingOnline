@@ -1,75 +1,84 @@
-import 'dart:io';
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shoppingonline/models/product.dart';
-import 'package:shoppingonline/widgets/show_title.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoppingonline/widgets/show_img.dart';
+import 'package:shoppingonline/widgets/show_progress_circular.dart';
 
+import '../models/user.dart';
 import '../utillity/constant.dart';
-import '../utillity/dialog.dart';
+import '../widgets/show_title.dart';
 
-class EditProduct extends StatefulWidget {
-  final ProductModel productModel;
-
-  const EditProduct({super.key, required this.productModel});
+class EditProfileSeller extends StatefulWidget {
+  const EditProfileSeller({super.key});
 
   @override
-  State<EditProduct> createState() => _EditProductState();
+  State<EditProfileSeller> createState() => _EditProfileSellerState();
 }
 
-class _EditProductState extends State<EditProduct> {
-  
-  ProductModel? productModel;
-  TextEditingController pdnameController = TextEditingController();
-  TextEditingController pdpriceController = TextEditingController();
-  TextEditingController pddetailController = TextEditingController();
-
-  List<String> pathImages = [];
-  List<String> paths = [];
-  List<File?> _image = [];
-  bool statusImage = false;
-
+class _EditProfileSellerState extends State<EditProfileSeller> {
+  UserModel? userModel;
   final formKey = GlobalKey<FormState>();
+  TextEditingController unameController = TextEditingController();
+  TextEditingController uaddreddController = TextEditingController();
+  TextEditingController uphoneController = TextEditingController();
+  LatLng? latLng;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    productModel = widget.productModel;
-    pdnameController.text = productModel!.name;
-    pdpriceController.text = productModel!.price;
-    pddetailController.text = productModel!.detail;
-    converStringToArray();
+    findUser();
+    findLatLng();
   }
 
-  void converStringToArray() {
-    String string = productModel!.images;
-    string = string.substring(1, string.length - 1);
-    List<String> strings = string.split(',');
-    for (var item in strings) {
-      pathImages.add(item.trim());
-      _image.add(null);
-    }
-    print('## pathImage ==>> ${pathImages}');
+  Future<Null> findUser() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? user = preferences.getString('user');
+
+    String apiGetUser =
+        '${MyConstant.domain}/shoppingonline/getUserWhereUser.php?isAdd=true&user=$user';
+    await Dio().get(apiGetUser).then((value) {
+      print('## value from API ==>> $value');
+
+      for (var item in json.decode(value.data)) {
+        setState(() {
+          userModel = UserModel.fromMap(item);
+          unameController.text = userModel!.name;
+          uaddreddController.text = userModel!.address;
+          uphoneController.text = userModel!.phone;
+        });
+      }
+    });
   }
 
-  Future<Null> processImagePicker(int index, ImageSource source) async {
-    try {
-      var image = await ImagePicker().pickImage(
-        source: source,
-        maxHeight: 800,
-        maxWidth: 800,
-      );
+  Future<Null> findLatLng() async {
+    Position? position = await findPosition();
+    if (position != null) {
       setState(() {
-        _image[index] = File(image!.path);
-        statusImage = true;
+        latLng = LatLng(position.latitude, position.longitude);
       });
-    } catch (e) {}
+    }
   }
 
+  Future<Position?> findPosition() async {
+    Position? position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+    } catch (e) {
+      position = null;
+    }
+    return position;
+  }
+
+  Future<Null> processEdit() async {
+    if (formKey.currentState!.validate()) {
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
@@ -82,8 +91,8 @@ class _EditProductState extends State<EditProduct> {
             tooltip: 'Edit Product',
           ),
         ],
+        title: Text('Edit ProFile Seller'),
         backgroundColor: MyConstant.primary,
-        title: Text('Add Product'),
       ),
       body: LayoutBuilder(
         builder: (context, double) => SingleChildScrollView(
@@ -100,14 +109,13 @@ class _EditProductState extends State<EditProduct> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     buildTitle('General : '),
-                    buildEditNameProduct(size),
-                    buildEditPricProduct(size),
-                    buildEditProductDetail(size),
-                    buildTitle('Image Product : '),
-                    buildImage(size, 0),
-                    buildImage(size, 1),
-                    buildImage(size, 2),
-                    buildImage(size, 3),
+                    buildEditProfileName(size),
+                    buildEditAddress(size),
+                    buildEditPhone(size),
+                    buildTitle('Avatar : '),
+                    buildImage(size),
+                    buildTitle('Location : '),
+                    buildEditMap(size)
                   ],
                 ),
               ),
@@ -118,17 +126,44 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
-  Container buildImage(double size, int index) {
+  Row buildEditMap(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          width: size * 0.8,
+          height: size * 0.8,
+          child: latLng == null
+              ? ShowProgressCircular()
+              : GoogleMap(
+                  initialCameraPosition:
+                      CameraPosition(target: latLng!, zoom: 16),
+                  onMapCreated: ((controller) {}),
+                  markers: <Marker>[
+                    Marker(
+                      markerId: MarkerId('id'),
+                      position: latLng!,
+                      infoWindow: InfoWindow(
+                          title: 'Your Location',
+                          snippet:
+                              'lat = ${latLng!.latitude}, lng = ${latLng!.longitude}'),
+                    ),
+                  ].toSet(),
+                ),
+        ),
+      ],
+    );
+  }
+
+  Container buildImage(double size) {
     return Container(
       margin: EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () => processImagePicker(index, ImageSource.camera),
+            onPressed: () {},
             icon: Icon(
               Icons.add_a_photo,
               size: 36,
@@ -136,15 +171,15 @@ class _EditProductState extends State<EditProduct> {
           ),
           Container(
             width: size * 0.6,
-            child: _image[index] == null
-                ? CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    imageUrl:
-                        '${MyConstant.domain}/shoppingonline/${pathImages[index]}')
-                : Image.file(_image[index]!),
+            child: userModel == null
+                ? ShowProgressCircular()
+                : userModel!.avatar == null
+                    ? ShowImage(pathImage: userModel!.avatar)
+                    : CachedNetworkImage(
+                        imageUrl: '${MyConstant.domain}${userModel!.avatar}'),
           ),
           IconButton(
-            onPressed: () => processImagePicker(index, ImageSource.gallery),
+            onPressed: () {},
             icon: Icon(
               Icons.add_photo_alternate,
               size: 36,
@@ -165,7 +200,49 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
-  Row buildEditProductDetail(double size) {
+  Row buildEditProfileName(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 15),
+          width: size * 0.8,
+          child: TextFormField(
+            controller: unameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'This field is required.';
+              } else {
+                return null;
+              }
+            },
+            decoration: InputDecoration(
+              labelStyle: MyConstant().p3Style(),
+              labelText: 'Name : ',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.pinkdark),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.pinklight),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.errorvalidate),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildEditAddress(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -174,7 +251,7 @@ class _EditProductState extends State<EditProduct> {
           width: size * 0.8,
           child: TextFormField(
             maxLines: 4,
-            controller: pddetailController,
+            controller: uaddreddController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -184,7 +261,7 @@ class _EditProductState extends State<EditProduct> {
             },
             decoration: InputDecoration(
               labelStyle: MyConstant().p3Style(),
-              labelText: 'Product Detail : ',
+              labelText: 'Address : ',
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
@@ -208,16 +285,15 @@ class _EditProductState extends State<EditProduct> {
     );
   }
 
-  Row buildEditPricProduct(double size) {
+  Row buildEditPhone(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           margin: const EdgeInsets.only(top: 15),
           width: size * 0.8,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            controller: pdpriceController,
+          child: TextFormField(keyboardType: TextInputType.phone,
+            controller: uphoneController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -227,7 +303,7 @@ class _EditProductState extends State<EditProduct> {
             },
             decoration: InputDecoration(
               labelStyle: MyConstant().p3Style(),
-              labelText: 'Price Product :',
+              labelText: 'Phone : ',
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: MyConstant.pinkdark),
                 borderRadius: BorderRadius.circular(10),
@@ -250,94 +326,5 @@ class _EditProductState extends State<EditProduct> {
       ],
     );
   }
-
-  Row buildEditNameProduct(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 15),
-          width: size * 0.8,
-          child: TextFormField(
-            controller: pdnameController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'This field is required.';
-              } else {
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-              labelStyle: MyConstant().p3Style(),
-              labelText: 'Name Product : ',
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.pinkdark),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.pinklight),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.errorvalidate),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: MyConstant.errorvalidate),
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<Null> processEdit() async {
-    if (formKey.currentState!.validate()) {
-      MyDialog().showProcressDialog(context);
-
-      String name = pdnameController.text;
-      String price = pdpriceController.text;
-      String detail = pddetailController.text;
-      String id = productModel!.id;
-      String images;
-      if (statusImage) {
-        //upload Image and Refresh array pathImages
-        int index = 0;
-        for (var item in _image) {
-          if (item != null) {
-            int i = Random().nextInt(100000000);
-            String nameImage = 'product$i.jpg';
-            String apiUploadImage =
-                '${MyConstant.domain}/shoppingonline/saveProduct.php';
-
-            Map<String, dynamic> map = {};
-            map['file'] =
-                await MultipartFile.fromFile(item.path, filename: nameImage);
-            FormData data = FormData.fromMap(map);
-            await Dio().post(apiUploadImage, data: data).then(
-              (value) {
-                pathImages[index] = '/product/$nameImage';
-              },
-            );
-          }
-          index++;
-        }
-
-        images = pathImages.toString();
-        Navigator.pop(context);
-      } else {
-        images = pathImages.toString();
-        Navigator.pop(context);
-      }
-      print('## statusImage = $statusImage');
-      print('## id = $id, name = $name, price = $price, detail = $detail');
-      print('## image = $images');
-
-      String apiEditProduct =
-          '${MyConstant.domain}/shoppingonline/editProductWhereId.php?isAdd=true&id=$id&name=$name&price=$price&detail=$detail&images=$images';
-      await Dio().get(apiEditProduct).then((value) => Navigator.pop(context));
-    }
-  }
+  
 }

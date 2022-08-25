@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../universes/Constant.dart';
+import '../utillity/constant.dart';
 import '../widgets/show_signout.dart';
 
 class RiderService extends StatefulWidget {

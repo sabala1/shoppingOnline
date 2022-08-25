@@ -12,6 +12,7 @@ class MyConstant {
   static String routeSellerervice = '/sellerService';
   static String routeRiderService = '/riderService';
   static String routeAddProduct = '/addProduct';
+  static String routeEditProfileSeller = '/editProfileSeller';
 
   //Image
   static String image1 = 'images/Delivery1.png';
@@ -24,7 +25,9 @@ class MyConstant {
   static Color pinklight = const Color(0xffffa4a2);
   static Color bluedark = const Color(0xff00227b);
   static Color bluelight = const Color(0xff3949ab);
-  static Color blackdark = const Color(0xff000000);
+  static Color dark = const Color(0xff000000);
+  static Color light = const Color(0xffffffff);
+  static Color grey = const Color(0xff6d6d6d);
   static Color errorvalidate = const Color(0xffFF0000);
 
   //Style
@@ -38,9 +41,9 @@ class MyConstant {
     color: pinkdark,
     fontWeight: FontWeight.w700,
   );
-  TextStyle p2whiteStyle() => const TextStyle(
+  TextStyle p2whiteStyle() => TextStyle(
     fontSize: 18,
-    color: Colors.white,
+    color: light,
     fontWeight: FontWeight.w700,
   );
   TextStyle p3Style() => TextStyle(
@@ -48,19 +51,29 @@ class MyConstant {
     color: pinkdark,
     fontWeight: FontWeight.normal
   );
-  TextStyle p3whiteStyle() => const TextStyle(
+  TextStyle p3whiteStyle() => TextStyle(
     fontSize: 14,
-    color: Colors.white,
+    color: light,
     fontWeight: FontWeight.normal
   );
   TextStyle b2Style() => TextStyle(
     fontSize: 18,
-    color: blackdark,
+    color: dark,
     fontWeight: FontWeight.w700,
+  );
+  TextStyle b2NorStyle() => TextStyle(
+    fontSize: 18,
+    color: dark,
+    fontWeight: FontWeight.normal,
   );
   TextStyle b3Style() => TextStyle(
     fontSize: 14,
-    color: blackdark,
+    color: dark,
+    fontWeight: FontWeight.normal,
+  );
+  TextStyle g2Style() => TextStyle(
+    fontSize: 18,
+    color: grey,
     fontWeight: FontWeight.normal,
   );
 

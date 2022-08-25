@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shoppingonline/universes/dialog.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../universes/Constant.dart';
+import '../utillity/constant.dart';
+import '../utillity/dialog.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});

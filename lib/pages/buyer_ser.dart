@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shoppingonline/universes/constant.dart';
-import 'package:shoppingonline/widgets/show_title.dart';
 
+import '../utillity/constant.dart';
 import '../widgets/show_signout.dart';
 
 class BuyerService extends StatefulWidget {

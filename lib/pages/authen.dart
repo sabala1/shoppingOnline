@@ -4,10 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/models/user.dart';
-import 'package:shoppingonline/universes/Constant.dart';
-import 'package:shoppingonline/universes/dialog.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
+
+import '../utillity/constant.dart';
+import '../utillity/dialog.dart';
 
 class Authen extends StatefulWidget {
   const Authen({Key? key}) : super(key: key);

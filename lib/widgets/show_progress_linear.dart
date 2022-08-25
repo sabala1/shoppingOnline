@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../universes/Constant.dart';
+import '../utillity/constant.dart';
 
 class ShowProgressLinear extends StatelessWidget {
   const ShowProgressLinear({Key? key}) : super(key: key);

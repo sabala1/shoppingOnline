@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoppingonline/models/user.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
 import '../bodys/shop_manage_seller.dart';
 import '../bodys/show_oder_seller.dart';
 import '../bodys/show_product_seller.dart';
-import '../universes/Constant.dart';
+import '../utillity/constant.dart';
+import '../widgets/show_progress_linear.dart';
 import '../widgets/show_signout.dart';
 
 class SellerService extends StatefulWidget {
@@ -15,12 +21,44 @@ class SellerService extends StatefulWidget {
 }
 
 class _SellerServiceState extends State<SellerService> {
-  List<Widget> widgets = [
-    ShowOrderSeller(),
-    ShopManageSeller(),
-    ShowProductSeller(),
-  ];
+  List<Widget> widgets = [];
   int indexWidget = 0;
+  UserModel? userModel;
+
+  @override
+  void initState() {
+    super.initState();
+    findUserModel();
+  }
+
+  Future<Null> findUserModel() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? id = preferences.getString('id');
+    print('## id login ==>> $id');
+    String apiGetUserWhereId =
+        '${MyConstant.domain}/shoppingonline/getUserWhereId.php?isAdd=true&id=$id';
+    await Dio().get(apiGetUserWhereId).then(
+      (value) {
+        print('## value ==>> $value');
+        for (var item in json.decode(value.data)) {
+          setState(
+            () {
+              userModel = UserModel.fromMap(item);
+              print('## name logined ==>> ${userModel!.name}');
+
+              widgets.add(
+                ShowOrderSeller(),
+              );
+              widgets.add(ShopManageSeller(userModel: userModel!));
+              widgets.add(
+                ShowProductSeller(),
+              );
+            },
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +67,48 @@ class _SellerServiceState extends State<SellerService> {
         backgroundColor: MyConstant.primary,
         title: const Text('Seller'),
       ),
-      drawer: Drawer(
-        child: Stack(
-          children: [
-            ShowSignOut(),
-            Column(
-              children: [
-                UserAccountsDrawerHeader(accountName: null, accountEmail: null),
-                menuShowOrder(),
-                menuShopManage(),
-                menuShowProduct(),
-              ],
+      drawer: widgets.length == 0
+          ? SizedBox()
+          : Drawer(
+              child: Stack(
+                children: [
+                  ShowSignOut(),
+                  Column(
+                    children: [
+                      buildHead(),
+                      menuShowOrder(),
+                      menuShopManage(),
+                      menuShowProduct(),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
+      body: widgets.length == 0 ? ShowProgressLinear() : widgets[indexWidget],
+    );
+  }
+
+  UserAccountsDrawerHeader buildHead() {
+    return UserAccountsDrawerHeader(
+      otherAccountsPictures: [
+        IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.face_outlined),
+          iconSize: 36,
+          color: MyConstant.light,
+          tooltip: 'Edit Shop',
         ),
+      ],
+      decoration: BoxDecoration(
+        color: MyConstant.bluelight,
       ),
-      body: widgets[indexWidget],
+      currentAccountPicture: CircleAvatar(
+        backgroundImage: NetworkImage(userModel == null
+            ? 'Avatar ?'
+            : '${MyConstant.domain}${userModel!.avatar}'),
+      ),
+      accountName: Text(userModel == null ? 'Name ?' : userModel!.name),
+      accountEmail: Text(userModel == null ? 'Type ?' : userModel!.type),
     );
   }
 

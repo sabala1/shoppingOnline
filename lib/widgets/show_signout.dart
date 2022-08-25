@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../universes/Constant.dart';
+import '../utillity/constant.dart';
 
 class ShowSignOut extends StatelessWidget {
   const ShowSignOut({super.key});
