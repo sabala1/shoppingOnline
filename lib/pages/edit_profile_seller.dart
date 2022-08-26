@@ -1,16 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_progress_circular.dart';
 
 import '../models/user.dart';
 import '../utillity/constant.dart';
+import '../utillity/dialog.dart';
 import '../widgets/show_title.dart';
 
 class EditProfileSeller extends StatefulWidget {
@@ -24,9 +28,10 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
   UserModel? userModel;
   final formKey = GlobalKey<FormState>();
   TextEditingController unameController = TextEditingController();
-  TextEditingController uaddreddController = TextEditingController();
+  TextEditingController uaddressController = TextEditingController();
   TextEditingController uphoneController = TextEditingController();
   LatLng? latLng;
+  File? _image;
 
   @override
   void initState() {
@@ -48,7 +53,7 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
         setState(() {
           userModel = UserModel.fromMap(item);
           unameController.text = userModel!.name;
-          uaddreddController.text = userModel!.address;
+          uaddressController.text = userModel!.address;
           uphoneController.text = userModel!.phone;
         });
       }
@@ -76,9 +81,61 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
 
   Future<Null> processEdit() async {
     if (formKey.currentState!.validate()) {
+      MyDialog().showProcressDialog(context);
+      if (_image == null) {
+        print('## User Current Avatar');
+        editValueToMySQL(userModel!.avatar);
+      } else {
+        print('## User New Avatar');
+        String apiSaveAvatar =
+            '${MyConstant.domain}/shoppingonline/saveAvatar.php';
+
+        List<String> nameAvatars = userModel!.avatar.split('/');
+        String nameImage = nameAvatars[nameAvatars.length - 1];
+        nameImage = 'edit ${Random().nextInt(100000000)}$nameImage';
+
+        Map<String, dynamic> map = {};
+        map['file'] =
+            await MultipartFile.fromFile(_image!.path, filename: nameImage);
+        FormData formData = FormData.fromMap(map);
+        await Dio().post(apiSaveAvatar, data: formData).then(
+          (value) {
+            print('Upload Succes');
+            String pathAvatar = '/shoppingonline/avatar/$nameImage';
+            editValueToMySQL(pathAvatar);
+          },
+        );
+
+        print('## User New Avatar nameImage ==>> $nameImage');
+      }
     }
   }
-  
+
+  Future<Null> editValueToMySQL(String pathAvatar) async {
+    print('## pathAvatar ==>> $pathAvatar');
+    String apiEditProfile =
+        '${MyConstant.domain}/shoppingonline/editProfileSellerWhereId.php?isAdd=true&id=${userModel!.id}&name=${unameController.text}&address=${uaddressController.text}&phone=${uphoneController.text}&avatar=$pathAvatar&lat=${latLng!.latitude}&lng=${latLng!.longitude}';
+    await Dio().get(apiEditProfile).then(
+          (value) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        );
+  }
+
+  Future<Null> createAvatar({ImageSource? source}) async {
+    try {
+      var image = await ImagePicker().pickImage(
+        source: source!,
+        maxHeight: 800,
+        maxWidth: 800,
+      );
+      setState(() {
+        _image = File(image!.path);
+      });
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
@@ -163,7 +220,7 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => createAvatar(source: ImageSource.camera),
             icon: Icon(
               Icons.add_a_photo,
               size: 36,
@@ -175,11 +232,15 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
                 ? ShowProgressCircular()
                 : userModel!.avatar == null
                     ? ShowImage(pathImage: userModel!.avatar)
-                    : CachedNetworkImage(
-                        imageUrl: '${MyConstant.domain}${userModel!.avatar}'),
+                    : _image == null
+                        ? CachedNetworkImage(
+                            imageUrl:
+                                '${MyConstant.domain}${userModel!.avatar}',
+                          )
+                        : Image.file(_image!),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => createAvatar(source: ImageSource.gallery),
             icon: Icon(
               Icons.add_photo_alternate,
               size: 36,
@@ -251,7 +312,7 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
           width: size * 0.8,
           child: TextFormField(
             maxLines: 4,
-            controller: uaddreddController,
+            controller: uaddressController,
             validator: (value) {
               if (value!.isEmpty) {
                 return 'This field is required.';
@@ -292,7 +353,8 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
         Container(
           margin: const EdgeInsets.only(top: 15),
           width: size * 0.8,
-          child: TextFormField(keyboardType: TextInputType.phone,
+          child: TextFormField(
+            keyboardType: TextInputType.phone,
             controller: uphoneController,
             validator: (value) {
               if (value!.isEmpty) {
@@ -326,5 +388,4 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
       ],
     );
   }
-  
 }
