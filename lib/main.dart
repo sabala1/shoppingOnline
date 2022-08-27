@@ -9,6 +9,7 @@ import 'package:shoppingonline/pages/create_acc.dart';
 import 'package:shoppingonline/pages/edit_profile_seller.dart';
 import 'package:shoppingonline/pages/rider_ser.dart';
 import 'package:shoppingonline/pages/seller_ser.dart';
+import 'package:shoppingonline/pages/show_cart.dart';
 
 import 'utillity/constant.dart';
 
@@ -20,6 +21,7 @@ final Map<String, WidgetBuilder> map = {
   '/riderService': (context) => const RiderService(),
   '/addProduct': (contex) => const AddProduct(),
   '/editProfileSeller': (contex) => const EditProfileSeller(),
+  '/showCart': (contex) => const ShowCart(),
 };
 
 String? initalRoute;

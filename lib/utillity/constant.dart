@@ -13,6 +13,7 @@ class MyConstant {
   static String routeRiderService = '/riderService';
   static String routeAddProduct = '/addProduct';
   static String routeEditProfileSeller = '/editProfileSeller';
+  static String showCart= '/showCart';
 
   //Image
   static String image1 = 'images/Delivery1.png';

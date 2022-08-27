@@ -11,11 +11,10 @@ import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_progress_linear.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../utillity/constant.dart';
-import '../widgets/show_progress_circular.dart';
+import '../../utillity/constant.dart';
+import '../../widgets/show_progress_circular.dart';
 
 class ShowProductSeller extends StatefulWidget {
-  const ShowProductSeller({super.key});
 
   @override
   State<ShowProductSeller> createState() => _ShowProductSellerState();
@@ -55,13 +54,13 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
         } else {
           //Have Data
           for (var item in json.decode(value.data)) {
-            ProductModel model = ProductModel.fromMap(item);
-            print('## name Product ==>> ${model.name}');
+            ProductModel models = ProductModel.fromMap(item);
+            print('## name Product ==>> ${models.name}');
 
             setState(() {
               load = false;
               haveData = true;
-              productModels.add(model);
+              productModels.add(models);
             });
           }
         }

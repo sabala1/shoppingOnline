@@ -8,17 +8,17 @@ import 'package:shoppingonline/utillity/constant.dart';
 import 'package:shoppingonline/widgets/show_progress_circular.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../models/user.dart';
+import '../../models/user.dart';
 
-class ShopManageSeller extends StatefulWidget {
+class ShowManageSeller extends StatefulWidget {
   final UserModel userModel;
-  const ShopManageSeller({super.key, required this.userModel});
+  const ShowManageSeller({super.key, required this.userModel});
 
   @override
-  State<ShopManageSeller> createState() => _ShopManageSellerState();
+  State<ShowManageSeller> createState() => _ShowManageSellerState();
 }
 
-class _ShopManageSellerState extends State<ShopManageSeller> {
+class _ShowManageSellerState extends State<ShowManageSeller> {
   UserModel? userModel;
 
   @override

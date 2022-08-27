@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingonline/models/user.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
-import '../bodys/shop_manage_seller.dart';
-import '../bodys/show_oder_seller.dart';
-import '../bodys/show_product_seller.dart';
+import '../bodys/seller/show_manage_seller.dart';
+import '../bodys/seller/show_oder_seller.dart';
+import '../bodys/seller/show_product_seller.dart';
 import '../utillity/constant.dart';
 import '../widgets/show_progress_linear.dart';
 import '../widgets/show_signout.dart';
@@ -23,7 +23,7 @@ class SellerService extends StatefulWidget {
 class _SellerServiceState extends State<SellerService> {
   List<Widget> widgets = [];
   int indexWidget = 0;
-  UserModel? userModel;
+  UserModel? userModels;
 
   @override
   void initState() {
@@ -43,13 +43,13 @@ class _SellerServiceState extends State<SellerService> {
         for (var item in json.decode(value.data)) {
           setState(
             () {
-              userModel = UserModel.fromMap(item);
-              print('## name logined ==>> ${userModel!.name}');
+              userModels = UserModel.fromMap(item);
+              print('## name logined ==>> ${userModels!.name}');
 
               widgets.add(
                 ShowOrderSeller(),
               );
-              widgets.add(ShopManageSeller(userModel: userModel!));
+              widgets.add(ShowManageSeller(userModel: userModels!));
               widgets.add(
                 ShowProductSeller(),
               );
@@ -76,9 +76,9 @@ class _SellerServiceState extends State<SellerService> {
                   Column(
                     children: [
                       buildHead(),
-                      menuShowOrder(),
-                      menuShopManage(),
-                      menuShowProduct(),
+                      showOrder(),
+                      shopManage(),
+                      showProduct(),
                     ],
                   ),
                 ],
@@ -103,16 +103,16 @@ class _SellerServiceState extends State<SellerService> {
         color: MyConstant.bluelight,
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: NetworkImage(userModel == null
+        backgroundImage: NetworkImage(userModels == null
             ? 'Avatar ?'
-            : '${MyConstant.domain}${userModel!.avatar}'),
+            : '${MyConstant.domain}${userModels!.avatar}'),
       ),
-      accountName: Text(userModel == null ? 'Name ?' : userModel!.name),
-      accountEmail: Text(userModel == null ? 'Type ?' : userModel!.type),
+      accountName: Text(userModels == null ? 'Name ?' : userModels!.name),
+      accountEmail: Text(userModels == null ? 'Type ?' : userModels!.type),
     );
   }
 
-  ListTile menuShowOrder() {
+  ListTile showOrder() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -132,7 +132,7 @@ class _SellerServiceState extends State<SellerService> {
     );
   }
 
-  ListTile menuShopManage() {
+  ListTile shopManage() {
     return ListTile(
       onTap: () {
         setState(() {
@@ -154,7 +154,7 @@ class _SellerServiceState extends State<SellerService> {
     );
   }
 
-  ListTile menuShowProduct() {
+  ListTile showProduct() {
     return ListTile(
       onTap: () {
         setState(() {

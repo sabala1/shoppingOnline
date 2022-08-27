@@ -25,7 +25,7 @@ class EditProfileSeller extends StatefulWidget {
 }
 
 class _EditProfileSellerState extends State<EditProfileSeller> {
-  UserModel? userModel;
+  UserModel? userModels;
   final formKey = GlobalKey<FormState>();
   TextEditingController unameController = TextEditingController();
   TextEditingController uaddressController = TextEditingController();
@@ -51,10 +51,10 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
 
       for (var item in json.decode(value.data)) {
         setState(() {
-          userModel = UserModel.fromMap(item);
-          unameController.text = userModel!.name;
-          uaddressController.text = userModel!.address;
-          uphoneController.text = userModel!.phone;
+          userModels = UserModel.fromMap(item);
+          unameController.text = userModels!.name;
+          uaddressController.text = userModels!.address;
+          uphoneController.text = userModels!.phone;
         });
       }
     });
@@ -84,13 +84,13 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
       MyDialog().showProcressDialog(context);
       if (_image == null) {
         print('## User Current Avatar');
-        editValueToMySQL(userModel!.avatar);
+        editValueToMySQL(userModels!.avatar);
       } else {
         print('## User New Avatar');
         String apiSaveAvatar =
             '${MyConstant.domain}/shoppingonline/saveAvatar.php';
 
-        List<String> nameAvatars = userModel!.avatar.split('/');
+        List<String> nameAvatars = userModels!.avatar.split('/');
         String nameImage = nameAvatars[nameAvatars.length - 1];
         nameImage = 'edit ${Random().nextInt(100000000)}$nameImage';
 
@@ -114,7 +114,7 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
   Future<Null> editValueToMySQL(String pathAvatar) async {
     print('## pathAvatar ==>> $pathAvatar');
     String apiEditProfile =
-        '${MyConstant.domain}/shoppingonline/editProfileSellerWhereId.php?isAdd=true&id=${userModel!.id}&name=${unameController.text}&address=${uaddressController.text}&phone=${uphoneController.text}&avatar=$pathAvatar&lat=${latLng!.latitude}&lng=${latLng!.longitude}';
+        '${MyConstant.domain}/shoppingonline/editProfileSellerWhereId.php?isAdd=true&id=${userModels!.id}&name=${unameController.text}&address=${uaddressController.text}&phone=${uphoneController.text}&avatar=$pathAvatar&lat=${latLng!.latitude}&lng=${latLng!.longitude}';
     await Dio().get(apiEditProfile).then(
           (value) {
             Navigator.pop(context);
@@ -228,14 +228,14 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
           ),
           Container(
             width: size * 0.6,
-            child: userModel == null
+            child: userModels == null
                 ? ShowProgressCircular()
-                : userModel!.avatar == null
-                    ? ShowImage(pathImage: userModel!.avatar)
+                : userModels!.avatar == null
+                    ? ShowImage(pathImage: userModels!.avatar)
                     : _image == null
                         ? CachedNetworkImage(
                             imageUrl:
-                                '${MyConstant.domain}${userModel!.avatar}',
+                                '${MyConstant.domain}${userModels!.avatar}',
                           )
                         : Image.file(_image!),
           ),
