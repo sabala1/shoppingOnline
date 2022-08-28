@@ -44,9 +44,6 @@ class MyDialog {
       context: context,
       builder: (context) => SimpleDialog(
         title: ListTile(
-          leading: ShowImage(
-            pathImage: MyConstant.image1,
-          ),
           title: ShowTitle(
             title: title,
             textStyle: MyConstant().p2Style(),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoppingonline/pages/add_wallet.dart';
 import 'package:shoppingonline/pages/add_product.dart';
 import 'package:shoppingonline/pages/authen.dart';
 import 'package:shoppingonline/pages/buyer_ser.dart';
@@ -22,6 +23,7 @@ final Map<String, WidgetBuilder> map = {
   '/addProduct': (contex) => const AddProduct(),
   '/editProfileSeller': (contex) => const EditProfileSeller(),
   '/showCart': (contex) => const ShowCart(),
+  '/addWallet': (contex) => const AddWallet(),
 };
 
 String? initalRoute;

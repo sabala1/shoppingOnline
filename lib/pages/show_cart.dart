@@ -31,10 +31,8 @@ class _ShowCartState extends State<ShowCart> {
   }
 
   Future<Null> processReadSQLite() async {
-
     if (sqliteModels.isNotEmpty) {
       sqliteModels.clear();
-
     }
     await SQLite().readSQLite().then((value) {
       setState(() {
@@ -78,18 +76,83 @@ class _ShowCartState extends State<ShowCart> {
       ),
       body: load
           ? ShowProgressLinear()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ShowSeller(),
-                builHead(),
-                listProduct(),
-                Divider(
-                  color: MyConstant.grey,
-                ),
-                buildTotal(),
-              ],
-            ),
+          : sqliteModels.isEmpty
+              ? Center(
+                  child: ShowTitle(
+                    title: 'Empty cart',
+                    textStyle: MyConstant().b3Style(),
+                  ),
+                )
+              : buildContant(),
+    );
+  }
+
+  Column buildContant() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ShowSeller(),
+        builHead(),
+        listProduct(),
+        Divider(
+          color: MyConstant.grey,
+        ),
+        buildTotal(),
+        Divider(
+          color: MyConstant.grey,
+        ),
+        buildButtonController(),
+      ],
+    );
+  }
+
+  Future<void> confirmDeleteAll() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          title: ShowTitle(
+            title: 'คุณต้องการลบสินค้าทั้งหมดในตระกร้าหรือไหม',
+            textStyle: MyConstant().b2Style(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await SQLite().emptySQLite().then((value) {
+                Navigator.pop(context);
+                processReadSQLite();
+              });
+            },
+            child: Text('ลบ'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('ยกเลิก'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row buildButtonController() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, MyConstant.addWallet);
+          },
+          child: Text('Order'),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 4, right: 8),
+          child: ElevatedButton(
+            onPressed: () => confirmDeleteAll(),
+            child: Text('Delete All'),
+          ),
+        ),
+      ],
     );
   }
 

@@ -4,7 +4,10 @@ class MyConstant {
   //General
   static String appName = 'Shopping Online';
   static String domain = 'https://7e2d-2405-9800-ba10-f0ca-483c-802f-5def-8a6.ngrok.io';
-  
+  static String urlPrompay = 'https://promptpay.io/0843030416.png';
+  static String publicKey = 'pkey_test_5syl93u1qfq1btynh64';
+  static String secreKey = 'skey_test_5syl8ttulf3xr6mj1lw';
+
   //Route
   static String routeAuthen = '/authen';
   static String routeCreateAccount = '/createAccount';
@@ -14,6 +17,7 @@ class MyConstant {
   static String routeAddProduct = '/addProduct';
   static String routeEditProfileSeller = '/editProfileSeller';
   static String showCart= '/showCart';
+  static String addWallet = '/addWallet';
 
   //Image
   static String image1 = 'images/Delivery1.png';
