@@ -3,6 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shoppingonline/utillity/constant.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
+import '../../widgets/nav_confirm_wallet.dart';
+
 class Bank extends StatefulWidget {
   const Bank({super.key});
 
@@ -21,7 +23,7 @@ class _BankState extends State<Bank> {
           buildBKKbank(),
           buildKbank(),
         ],
-      ),
+      ),floatingActionButton: NavConfirmWallet(),
     );
   }
 

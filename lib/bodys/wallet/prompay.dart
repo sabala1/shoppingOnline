@@ -7,6 +7,7 @@ import 'package:shoppingonline/utillity/dialog.dart';
 import 'package:shoppingonline/widgets/show_progress_circular.dart';
 
 import '../../utillity/constant.dart';
+import '../../widgets/nav_confirm_wallet.dart';
 import '../../widgets/show_title.dart';
 
 class Prompay extends StatefulWidget {
@@ -31,7 +32,7 @@ class _PrompayState extends State<Prompay> {
             buildDownload(),
           ],
         ),
-      ),
+      ),floatingActionButton: NavConfirmWallet(),
     );
   }
 

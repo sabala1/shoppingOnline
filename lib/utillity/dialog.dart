@@ -7,6 +7,12 @@ import 'package:shoppingonline/widgets/show_img.dart';
 import 'package:shoppingonline/widgets/show_title.dart';
 
 class MyDialog {
+
+  final Function()? funcAction;
+
+  MyDialog({this.funcAction});
+
+  
   Future<Null> alertLocationService(
       BuildContext context, String title, String message) async {
     showDialog(
@@ -59,6 +65,35 @@ class MyDialog {
             child: const Text('OK'),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<Null> actionDialog(
+    BuildContext context,
+    String title,
+    String message,
+  ) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: ListTile(
+          title: ShowTitle(
+            title: title,
+            textStyle: MyConstant().p2Style(),
+          ),
+          subtitle: ShowTitle(
+            title: message,
+            textStyle: MyConstant().p3Style(),
+          ),
+        ),actions: [TextButton(
+            onPressed: funcAction,
+            child: Text('OK'),
+          ),
+           TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),],
       ),
     );
   }

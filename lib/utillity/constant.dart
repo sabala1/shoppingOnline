@@ -16,13 +16,15 @@ class MyConstant {
   static String routeRiderService = '/riderService';
   static String routeAddProduct = '/addProduct';
   static String routeEditProfileSeller = '/editProfileSeller';
-  static String showCart= '/showCart';
-  static String addWallet = '/addWallet';
+  static String routeShowCart= '/showCart';
+  static String routeaddWallet = '/addWallet';
+  static String routeConfirmAddWallet = '/confirmAddWallet';
 
   //Image
   static String image1 = 'images/Delivery1.png';
   static String avatar = 'images/avatar.png';
   static String avatar1 = 'images/avatar1.png';
+  static String logo = 'images/logo.jpg';
 
   //Color
   static Color primary = const Color(0xffe57373);

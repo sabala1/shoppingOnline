@@ -9,6 +9,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utillity/dialog.dart';
+import '../../widgets/nav_confirm_wallet.dart';
 
 class Credit extends StatefulWidget {
   const Credit({super.key});

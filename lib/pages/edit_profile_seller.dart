@@ -105,7 +105,6 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
             editValueToMySQL(pathAvatar);
           },
         );
-
         print('## User New Avatar nameImage ==>> $nameImage');
       }
     }

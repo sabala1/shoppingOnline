@@ -48,6 +48,13 @@ dependencies:
   mask_text_input_formatter: ^2.4.0
   omise_flutter: ^0.1.6
   http: ^0.13.5
+  intl: ^0.17.0
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/logo.jpg"
 
 dev_dependencies:
   flutter_test:

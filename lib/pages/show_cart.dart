@@ -141,7 +141,7 @@ class _ShowCartState extends State<ShowCart> {
       children: [
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, MyConstant.addWallet);
+            Navigator.pushNamed(context, MyConstant.routeaddWallet);
           },
           child: Text('Order'),
         ),

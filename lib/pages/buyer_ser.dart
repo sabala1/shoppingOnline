@@ -29,7 +29,7 @@ class _BuyerServiceState extends State<BuyerService> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, MyConstant.showCart),
+            onPressed: () => Navigator.pushNamed(context, MyConstant.routeShowCart),
             icon: Icon(Icons.shopping_cart_outlined),
           ),
         ],

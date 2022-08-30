@@ -6,6 +6,7 @@ import 'package:shoppingonline/pages/add_wallet.dart';
 import 'package:shoppingonline/pages/add_product.dart';
 import 'package:shoppingonline/pages/authen.dart';
 import 'package:shoppingonline/pages/buyer_ser.dart';
+import 'package:shoppingonline/pages/confirm_add_wallet.dart';
 import 'package:shoppingonline/pages/create_acc.dart';
 import 'package:shoppingonline/pages/edit_profile_seller.dart';
 import 'package:shoppingonline/pages/rider_ser.dart';
@@ -24,6 +25,7 @@ final Map<String, WidgetBuilder> map = {
   '/editProfileSeller': (contex) => const EditProfileSeller(),
   '/showCart': (contex) => const ShowCart(),
   '/addWallet': (contex) => const AddWallet(),
+  '/confirmAddWallet': (contex) => const ConfirmAddWallet(),
 };
 
 String? initalRoute;
